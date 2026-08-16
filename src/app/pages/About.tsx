@@ -4,6 +4,7 @@ import { motion, useInView } from "motion/react";
 import { ArrowRight, Scissors, Star, Award, Users } from "lucide-react";
 import ceoImage from "../../assets/CEO.png";
 import { ElfsightWidget } from "../components/ElfsightWidget";
+import tailoringCraft from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -53,7 +54,7 @@ export function About() {
         style={{ minHeight: 500, background: "#1A0E0B", paddingTop: 140 }}
       >
         <img
-          src="https://images.unsplash.com/photo-1613915617430-8ab0fd7c6baf?w=1600&h=700&fit=crop&auto=format"
+          src={tailoringCraft}
           alt="Fashion editorial background"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
@@ -92,7 +93,7 @@ export function About() {
                 transition={{ duration: 1.1, ease }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1580657018950-c7f7d6a6d990?w=800&h=1067&fit=crop&auto=format"
+                  src={tailoringCraft}
                   alt="Bespoke tailoring craft"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />

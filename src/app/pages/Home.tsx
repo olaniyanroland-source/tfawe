@@ -4,6 +4,7 @@ import { motion, useInView, useScroll, useTransform } from "motion/react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import heroVideo from "../../assets/heroVideo.mp4";
 import ceoImage from "../../assets/CEO.png";
+import tfaweWorkImage from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 const heroTextShadow = "0 3px 18px rgba(26,14,11,.82), 0 1px 2px rgba(26,14,11,.9)";
@@ -23,7 +24,7 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 }
 
 const EDITORIAL = [
-  { src: "https://images.unsplash.com/photo-1580478491436-fd6a937acc9e?w=600&h=800&fit=crop&auto=format", alt: "Editorial fashion portrait", h: "h-80 lg:h-[500px]" },
+  { src: tfaweWorkImage, alt: "TFawe tailoring work", h: "h-80 lg:h-[500px]" },
   { src: "https://images.unsplash.com/photo-1664076458686-3449062080ac?w=600&h=800&fit=crop&auto=format", alt: "Woman in elegant dress", h: "h-56 lg:h-72 self-end" },
   { src: "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=600&h=800&fit=crop&auto=format", alt: "Red gown editorial", h: "h-72 lg:h-[420px]" },
 ];
