@@ -12,7 +12,7 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
   children: React.ReactNode; delay?: number; y?: number; className?: string;
 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, amount: 0.2 });
   return (
     <motion.div ref={ref} className={className}
       initial={{ opacity: 0, y }}
@@ -87,10 +87,6 @@ export function About() {
               <motion.div
                 className="w-full overflow-hidden"
                 style={{ aspectRatio: "3/4", background: "#D9CBBF" }}
-                initial={{ clipPath: "inset(100% 0 0 0)" }}
-                whileInView={{ clipPath: "inset(0% 0 0 0)" }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 1.1, ease }}
               >
                 <img
                   src={tailoringCraft}
