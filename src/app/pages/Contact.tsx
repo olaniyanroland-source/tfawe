@@ -147,20 +147,16 @@ export function Contact() {
 
             {/* Studio image */}
             <Reveal y={0}>
-              <motion.div
+              <div
                 className="overflow-hidden"
-                style={{ height: 260, background: "#D9CBBF" }}
-                initial={{ clipPath: "inset(0 100% 0 0)" }}
-                whileInView={{ clipPath: "inset(0 0% 0 0)" }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 1, ease }}
+                style={{ minHeight: 260, aspectRatio: "16 / 10", background: "#D9CBBF" }}
               >
                 <img
                   src={tfaweWorkImage}
                   alt="TFawe tailored tuxedo"
                   className="w-full h-full object-cover"
                 />
-              </motion.div>
+              </div>
             </Reveal>
           </div>
 
