@@ -12,7 +12,7 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <motion.div ref={ref} className={className}
+    <motion.div ref={ref} className={`min-w-0 ${className}`}
       initial={{ opacity: 0, y }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay, ease }}
@@ -60,7 +60,7 @@ export function Contact() {
     setTimeout(() => setSent(false), 6000);
   }
 
-  const field = "w-full px-4 py-3.5 text-sm outline-none";
+  const field = "w-full box-border px-4 py-3.5 text-sm outline-none";
   const fieldStyle = { background: "#ECE1D8", border: "1px solid rgba(121,65,55,.2)", color: "#2C1810" };
 
   return (
@@ -101,19 +101,19 @@ export function Contact() {
 
       {/* ── INFO + FORM ── */}
       <section className="py-24 px-6 lg:px-14">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+        <div className="max-w-7xl mx-auto grid min-w-0 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
           {/* Contact details */}
-          <div>
-            <div className="grid sm:grid-cols-2 gap-8 mb-14">
+          <div className="min-w-0">
+            <div className="grid min-w-0 sm:grid-cols-2 gap-8 mb-14">
               {INFO.map(({ icon, label, lines }, i) => (
                 <Reveal key={label} delay={i * 0.08}>
-                  <div className="flex items-start gap-4">
+                  <div className="flex min-w-0 items-start gap-4">
                     <div className="shrink-0 mt-0.5 p-3" style={{ background: "#794137", color: "#ECE1D8" }}>{icon}</div>
-                    <div>
+                    <div className="min-w-0">
                       <p className="mb-2 text-xs tracking-[0.2em] uppercase" style={{ color: "#B39085" }}>{label}</p>
                       {lines.map(l => (
-                        <p key={l} className="text-sm leading-relaxed" style={{ color: "#3D2218" }}>{l}</p>
+                        <p key={l} className="text-sm leading-relaxed break-words" style={{ color: "#3D2218" }}>{l}</p>
                       ))}
                     </div>
                   </div>
@@ -130,14 +130,14 @@ export function Contact() {
                 <Reveal key={label} delay={i * 0.07}>
                   <a
                     href={href}
-                    className="flex items-center justify-between px-5 py-4 group transition-colors duration-200"
+                    className="flex min-w-0 items-center justify-between gap-4 px-5 py-4 group transition-colors duration-200"
                     style={{ background: "#F5EDE7", border: "1px solid rgba(121,65,55,.12)" }}
                     onMouseEnter={e => (e.currentTarget.style.borderColor = "rgba(121,65,55,.3)")}
                     onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(121,65,55,.12)")}
                   >
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-xs tracking-[0.15em] uppercase" style={{ color: "#B39085" }}>{label}</p>
-                      <p className="text-sm" style={{ color: "#3D2218" }}>{handle}</p>
+                      <p className="text-sm break-words" style={{ color: "#3D2218" }}>{handle}</p>
                     </div>
                     <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-200" style={{ color: "#794137" }} />
                   </a>
@@ -148,7 +148,7 @@ export function Contact() {
             {/* Studio image */}
             <Reveal y={0}>
               <div
-                className="overflow-hidden"
+                className="w-full max-w-full overflow-hidden"
                 style={{ minHeight: 260, aspectRatio: "16 / 10", background: "#D9CBBF" }}
               >
                 <img
@@ -161,7 +161,7 @@ export function Contact() {
           </div>
 
           {/* Form */}
-          <div>
+          <div className="min-w-0">
             <Reveal><p className="mb-3 text-xs tracking-[0.3em] uppercase" style={{ color: "#794137" }}>Send a Message</p></Reveal>
             <Reveal delay={0.1}>
               <h2 className="mb-8" style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,3.5vw,2.8rem)", fontWeight: 400, color: "#2C1810" }}>
