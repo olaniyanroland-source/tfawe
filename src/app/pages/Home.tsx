@@ -33,7 +33,7 @@ const QUICK_LINKS = [
   { label: "Our Story",    sub: "Est. 2014 · Toronto",              to: "/about",       img: "https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=600&h=400&fit=crop&fm=jpg&q=80" },
   { label: "Pricing",      sub: "Garments from $200",               to: "/pricing",     img: "https://images.unsplash.com/photo-1603394151492-5e9b974b090b?w=600&h=400&fit=crop&fm=jpg&q=80" },
   { label: "Book a Fit",   sub: "Reserve your consultation",        to: "/appointment", img: "https://images.unsplash.com/photo-1629511565591-a1d494ad6c58?w=600&h=400&fit=crop&fm=jpg&q=80" },
-  { label: "Contact",      sub: "Toronto, Canada",                  to: "/contact",     img: "https://images.unsplash.com/photo-1771876499965-72f0a702c45a?w=600&h=400&fit=crop&fm=jpg&q=80" },
+  { label: "Contact",      sub: "Toronto, Canada",                  to: "/contact",     img: tfaweWorkImage },
 ];
 
 function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {

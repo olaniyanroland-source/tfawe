@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView, AnimatePresence } from "motion/react";
 import { ArrowRight, MapPin, Phone, Mail, Clock, CheckCircle, Instagram } from "lucide-react";
+import tfaweWorkImage from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -155,8 +156,8 @@ export function Contact() {
                 transition={{ duration: 1, ease }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1771876499965-72f0a702c45a?w=800&h=520&fit=crop&fm=jpg&q=80"
-                  alt="TFawe boutique interior"
+                  src={tfaweWorkImage}
+                  alt="TFawe tailored tuxedo"
                   className="w-full h-full object-cover"
                 />
               </motion.div>
