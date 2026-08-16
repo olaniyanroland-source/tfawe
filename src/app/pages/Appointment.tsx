@@ -60,7 +60,7 @@ export function Appointment() {
         style={{ minHeight: 480, paddingTop: 140, paddingBottom: 80, background: "#2C1810" }}
       >
         <img
-          src="https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=1600&h=700&fit=crop&auto=format"
+          src="https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=1600&h=700&fit=crop&fm=jpg&q=80"
           alt="Fashion consultation"
           className="absolute inset-0 w-full h-full object-cover opacity-25"
         />
@@ -159,7 +159,7 @@ export function Appointment() {
                 transition={{ duration: 1, ease }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1629511565591-a1d494ad6c58?w=800&h=600&fit=crop&auto=format"
+                  src="https://images.unsplash.com/photo-1629511565591-a1d494ad6c58?w=800&h=600&fit=crop&fm=jpg&q=80"
                   alt="Styling session"
                   className="w-full h-full object-cover"
                 />

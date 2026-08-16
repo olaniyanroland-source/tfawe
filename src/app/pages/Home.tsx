@@ -25,15 +25,15 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 
 const EDITORIAL = [
   { src: tfaweWorkImage, alt: "TFawe tailoring work", h: "h-80 lg:h-[500px]" },
-  { src: "https://images.unsplash.com/photo-1664076458686-3449062080ac?w=600&h=800&fit=crop&auto=format", alt: "Woman in elegant dress", h: "h-56 lg:h-72 self-end" },
-  { src: "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=600&h=800&fit=crop&auto=format", alt: "Red gown editorial", h: "h-72 lg:h-[420px]" },
+  { src: "https://images.unsplash.com/photo-1664076458686-3449062080ac?w=600&h=800&fit=crop&fm=jpg&q=80", alt: "Woman in elegant dress", h: "h-56 lg:h-72 self-end" },
+  { src: "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=600&h=800&fit=crop&fm=jpg&q=80", alt: "Red gown editorial", h: "h-72 lg:h-[420px]" },
 ];
 
 const QUICK_LINKS = [
-  { label: "Our Story",    sub: "Est. 2014 · Toronto",              to: "/about",       img: "https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=600&h=400&fit=crop&auto=format" },
-  { label: "Pricing",      sub: "Garments from $200",               to: "/pricing",     img: "https://images.unsplash.com/photo-1603394151492-5e9b974b090b?w=600&h=400&fit=crop&auto=format" },
-  { label: "Book a Fit",   sub: "Reserve your consultation",        to: "/appointment", img: "https://images.unsplash.com/photo-1629511565591-a1d494ad6c58?w=600&h=400&fit=crop&auto=format" },
-  { label: "Contact",      sub: "Toronto, Canada",                  to: "/contact",     img: "https://images.unsplash.com/photo-1771876499965-72f0a702c45a?w=600&h=400&fit=crop&auto=format" },
+  { label: "Our Story",    sub: "Est. 2014 · Toronto",              to: "/about",       img: "https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=600&h=400&fit=crop&fm=jpg&q=80" },
+  { label: "Pricing",      sub: "Garments from $200",               to: "/pricing",     img: "https://images.unsplash.com/photo-1603394151492-5e9b974b090b?w=600&h=400&fit=crop&fm=jpg&q=80" },
+  { label: "Book a Fit",   sub: "Reserve your consultation",        to: "/appointment", img: "https://images.unsplash.com/photo-1629511565591-a1d494ad6c58?w=600&h=400&fit=crop&fm=jpg&q=80" },
+  { label: "Contact",      sub: "Toronto, Canada",                  to: "/contact",     img: "https://images.unsplash.com/photo-1771876499965-72f0a702c45a?w=600&h=400&fit=crop&fm=jpg&q=80" },
 ];
 
 const SELECTED_WORK = [
@@ -42,7 +42,7 @@ const SELECTED_WORK = [
     type: "Hand-finished bridal",
     detail: "Sculpted bodice, silk organza train, hidden corsetry.",
     measure: "01 / 06",
-    img: "https://images.unsplash.com/photo-1594552072238-b8a33785b261?w=900&h=1200&fit=crop&auto=format",
+    img: "https://images.unsplash.com/photo-1594552072238-b8a33785b261?w=900&h=1200&fit=crop&fm=jpg&q=80",
     width: "clamp(18rem, 32vw, 30rem)",
     height: "clamp(24rem, 52svh, 32rem)",
     align: "self-end",
@@ -52,7 +52,7 @@ const SELECTED_WORK = [
     type: "Custom eveningwear",
     detail: "Peak lapel dinner jacket cut close through the waist.",
     measure: "02 / 06",
-    img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&h=1200&fit=crop&auto=format",
+    img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&h=1200&fit=crop&fm=jpg&q=80",
     width: "clamp(14rem, 22vw, 21rem)",
     height: "clamp(20rem, 43svh, 26rem)",
     align: "self-start",
@@ -62,7 +62,7 @@ const SELECTED_WORK = [
     type: "Occasion garment",
     detail: "Fluid drape, high-slit movement, hand-balanced hem.",
     measure: "03 / 06",
-    img: "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=900&h=1200&fit=crop&auto=format",
+    img: "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=900&h=1200&fit=crop&fm=jpg&q=80",
     width: "clamp(17rem, 29vw, 27rem)",
     height: "clamp(22rem, 49svh, 30rem)",
     align: "self-center",
@@ -72,7 +72,7 @@ const SELECTED_WORK = [
     type: "Tailored separates",
     detail: "Soft shoulder, relaxed trouser line, matte wool finish.",
     measure: "04 / 06",
-    img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=900&h=1200&fit=crop&auto=format",
+    img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=900&h=1200&fit=crop&fm=jpg&q=80",
     width: "clamp(20rem, 37vw, 36rem)",
     height: "clamp(25rem, 55svh, 34rem)",
     align: "self-end",
@@ -121,7 +121,7 @@ export function Home() {
         <video
           className="absolute inset-0 w-full h-full object-cover"
           autoPlay muted loop playsInline
-          poster="https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=1920&h=1080&fit=crop&auto=format"
+          poster="https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=1920&h=1080&fit=crop&fm=jpg&q=80"
         >
           <source src={heroVideo} type="video/mp4" />
         </video>

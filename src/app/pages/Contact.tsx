@@ -155,7 +155,7 @@ export function Contact() {
                 transition={{ duration: 1, ease }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1771876499965-72f0a702c45a?w=800&h=520&fit=crop&auto=format"
+                  src="https://images.unsplash.com/photo-1771876499965-72f0a702c45a?w=800&h=520&fit=crop&fm=jpg&q=80"
                   alt="TFawe boutique interior"
                   className="w-full h-full object-cover"
                 />
@@ -267,7 +267,7 @@ export function Contact() {
               transition={{ duration: 0.8 }}
             >
               <img
-                src="https://images.unsplash.com/photo-1603394151492-5e9b974b090b?w=1400&h=640&fit=crop&auto=format"
+                src="https://images.unsplash.com/photo-1603394151492-5e9b974b090b?w=1400&h=640&fit=crop&fm=jpg&q=80"
                 alt="Toronto, Canada"
                 className="w-full h-full object-cover opacity-40"
               />
