@@ -291,10 +291,6 @@ export function Pricing() {
             <motion.div
               className="w-full overflow-hidden"
               style={{ aspectRatio: "4/5", background: "#D9CBBF" }}
-              initial={{ clipPath: "inset(0 100% 0 0)" }}
-              whileInView={{ clipPath: "inset(0 0% 0 0)" }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 1, ease }}
             >
               <img
                 src={jacketImage}
