@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView, AnimatePresence } from "motion/react";
 import { ArrowRight, Check } from "lucide-react";
+import jacketImage from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 const darkSectionTextShadow = "0 1px 8px rgba(26,14,11,.65)";
@@ -296,9 +297,9 @@ export function Pricing() {
               transition={{ duration: 1, ease }}
             >
               <img
-                src="https://images.unsplash.com/photo-1598808503746-f34c53b9323e?w=800&h=1000&fit=crop&auto=format"
+                src={jacketImage}
                 alt="Bespoke jacket on display"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover scale-[1.06]"
               />
             </motion.div>
           </Reveal>
