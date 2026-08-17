@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import type { SyntheticEvent } from "react";
 import { motion, useInView } from "motion/react";
-import glass1 from "../../assets/glass1.jpeg";
-import glass2 from "../../assets/glass2.jpeg";
-import glass3 from "../../assets/glass3.jpeg";
-import glass4 from "../../assets/glass4.jpeg";
-import glass5 from "../../assets/glass5.jpeg";
-import glass6 from "../../assets/glass6.jpeg";
+import glass1 from "../../assets/glass1-optimized.jpg";
+import glass2 from "../../assets/glass2-optimized.jpg";
+import glass3 from "../../assets/glass3-optimized.jpg";
+import glass4 from "../../assets/glass4-optimized.jpg";
+import glass5 from "../../assets/glass5-optimized.jpg";
+import glass6 from "../../assets/glass6-optimized.jpg";
 import tfaweWorkImage from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
