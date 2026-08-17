@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView, AnimatePresence } from "motion/react";
-import { ArrowRight, MapPin, Clock, Calendar, CheckCircle } from "lucide-react";
+import { ArrowRight, MapPin, Clock, Calendar, CheckCircle, Ruler, CreditCard } from "lucide-react";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -100,6 +100,91 @@ export function Appointment() {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── PRIVATE CONSULTATION ── */}
+      <section className="py-20 px-6 lg:px-14" style={{ background: "#F5EDE7" }}>
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-start">
+          <div>
+            <Reveal>
+              <p className="mb-3 text-xs tracking-[0.3em] uppercase" style={{ color: "#794137" }}>Consultation</p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h2
+                className="mb-6"
+                style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,3.5vw,3rem)", fontWeight: 400, color: "#2C1810", lineHeight: 1.15 }}
+              >
+                Your Private<br />
+                <em style={{ fontStyle: "italic", color: "#794137" }}>Consultation</em>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.15}><div className="w-10 h-px mb-6" style={{ background: "#B39085" }} /></Reveal>
+            <Reveal delay={0.2}>
+              <p className="text-sm leading-loose" style={{ color: "#5A3A30" }}>
+                Your TFAWE consultation is the first step in creating a garment made specifically for you.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="space-y-8">
+            <Reveal delay={0.1}>
+              <p className="text-sm leading-loose" style={{ color: "#5A3A30" }}>
+                We’ll explore our fabric selections together and discuss your preferred style, colours, details, and overall vision. It’s also an opportunity to ask questions and understand the options available for your custom garment.
+              </p>
+            </Reveal>
+
+            <div className="grid md:grid-cols-2 gap-px" style={{ background: "rgba(121,65,55,.14)" }}>
+              <Reveal delay={0.15}>
+                <div className="h-full p-7 lg:p-8" style={{ background: "#F5EDE7" }}>
+                  <div className="mb-5 p-3 w-fit" style={{ background: "rgba(121,65,55,.08)", color: "#794137" }}>
+                    <Ruler size={20} />
+                  </div>
+                  <h3 className="mb-3 text-sm font-semibold tracking-[0.12em] uppercase" style={{ color: "#2C1810" }}>
+                    Measurements
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
+                    Once you decide to proceed with your custom garment, measurements will be taken.
+                  </p>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.2}>
+                <div className="h-full p-7 lg:p-8" style={{ background: "#F5EDE7" }}>
+                  <div className="mb-5 p-3 w-fit" style={{ background: "rgba(121,65,55,.08)", color: "#794137" }}>
+                    <CreditCard size={20} />
+                  </div>
+                  <h3 className="mb-3 text-sm font-semibold tracking-[0.12em] uppercase" style={{ color: "#2C1810" }}>
+                    Consultation Fee
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
+                    A $50 consultation fee is required to secure your appointment. If you decide to proceed with your order, the full consultation fee will be credited toward the final cost of your garment.
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+
+            <Reveal delay={0.25}>
+              <div className="grid md:grid-cols-2 gap-6 pt-2">
+                <div>
+                  <p className="mb-2 text-xs font-semibold tracking-[0.16em] uppercase" style={{ color: "#794137" }}>
+                    In-person appointments
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
+                    Measurements will be taken by a TFAWE representative during your appointment.
+                  </p>
+                </div>
+                <div>
+                  <p className="mb-2 text-xs font-semibold tracking-[0.16em] uppercase" style={{ color: "#794137" }}>
+                    Virtual appointments
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
+                    You will need a measuring tape and someone available to assist with taking your measurements. Our team will guide both of you through the process step by step to ensure the measurements are taken correctly.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -270,7 +355,7 @@ export function Appointment() {
                 </Reveal>
 
                 <p className="text-xs text-center" style={{ color: "rgba(121,65,55,.45)" }}>
-                  We respond within 24 hours. No payment required to book.
+                  We respond within 24 hours. A $50 consultation fee secures your appointment.
                 </p>
               </form>
             )}

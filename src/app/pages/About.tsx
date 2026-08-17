@@ -23,16 +23,16 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 }
 
 const TIMELINE = [
-  { year: "2014", event: "TFawe founded by Tunde Fawe in a small Toronto studio." },
-  { year: "2016", event: "First major editorial feature in British Vogue. Clientele doubles within a year." },
-  { year: "2018", event: "Refined the made-to-measure process from private fittings to final hand finishing." },
-  { year: "2021", event: "Launched virtual styling and shipped garments internationally for the first time." },
-  { year: "2024", event: "Named one of Toronto's top ten independent ateliers by The Times Style." },
+  { year: "2022", event: "TFAWE was founded in Toronto by Tunde Fawe as a custom menswear house built around individuality, fit, and timeless design." },
+  { year: "2023", event: "The brand refined its private consultation experience, giving each client a clear path from fabric selection to measurements and final garment decisions." },
+  { year: "2024", event: "TFAWE expanded its made-to-measure offering across suits, jackets, trousers, shirts, and selected accessories for a more complete wardrobe." },
+  { year: "2025", event: "Virtual consultations and guided measurement support made the TFAWE experience more accessible for clients beyond the studio." },
+  { year: "Today", event: "TFAWE continues to grow as a modern menswear house, combining tailoring discipline, personal service, and carefully curated finishing pieces." },
 ];
 
 const MAKER = {
   name: "Tunde Fawe",
-  role: "Founder, Creative Director & Tailor",
+  role: "Founder & Creative Director",
   img: ceoImage,
 };
 
@@ -110,17 +110,24 @@ export function About() {
             <Reveal delay={0.15}><div className="w-10 h-px my-6" style={{ background: "#B39085" }} /></Reveal>
             <Reveal delay={0.2}>
               <p className="mb-5 text-sm leading-loose" style={{ color: "#5A3A30" }}>
-                Founded in 2014 by master tailor Tunde Fawe, TFawe was born from a single belief: clothing is a language, and every person deserves to speak it fluently. Our Toronto atelier is an intimate space where tradition meets modernity.
+
+Established in Toronto, Canada in 2022, TFAWE is a custom menswear house created for men who believe what they wear should be as individual as they are.
+
+At the heart of TFAWE is a simple idea: exceptional clothing begins with understanding the man wearing it.
+
+We create custom made suits and menswear with a focus on personal style, proportion, fit, and the details that make a garment feel distinctly yours. From tailored suits and jackets to shirts and selected accessories, including our own eyewear, TFAWE is building a modern menswear house where clothing and personal expression come together.
+
+Our approach is rooted in timeless menswear rather than passing trends. We believe luxury does not need to be loud. It can be seen in the way a jacket sits on the shoulders, the balance of a silhouette, the choice of fabric, the precision of the details, and ultimately, how confidently a man carries himself.
               </p>
             </Reveal>
             <Reveal delay={0.25}>
               <p className="mb-8 text-sm leading-loose" style={{ color: "#5A3A30" }}>
-                We work with the world's finest mills — English, Italian, and Japanese — combining centuries-old hand-stitching with contemporary silhouettes. Every garment we produce is entirely unique, because so is the person who wears it.
+                TFAWE was established in Toronto with a vision to create a menswear brand that brings together modern design, traditional tailoring knowledge, and a distinctly personal approach to dressing..
               </p>
             </Reveal>
             <Reveal delay={0.3}>
               <div className="grid grid-cols-3 gap-5 mb-8">
-                {[["12+", "Years"], ["840+", "Clients"], ["3", "Awards"]].map(([n, l]) => (
+                {[["4+", "Years"], ["280+", "Clients"], ["3", "Awards"]].map(([n, l]) => (
                   <div key={l} className="border-l-2 pl-4" style={{ borderColor: "#794137" }}>
                     <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: 400, color: "#794137", lineHeight: 1 }}>{n}</p>
                     <p className="mt-1 text-xs tracking-[0.18em] uppercase" style={{ color: "#B39085" }}>{l}</p>
@@ -170,7 +177,7 @@ export function About() {
           <Reveal><p className="mb-3 text-xs tracking-[0.3em] uppercase" style={{ color: "#794137" }}>Milestones</p></Reveal>
           <Reveal delay={0.1}>
             <h2 className="mb-14" style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,3.5vw,3rem)", fontWeight: 400, color: "#2C1810" }}>
-              A decade of craft
+              A growing house of craft
             </h2>
           </Reveal>
 
@@ -213,7 +220,17 @@ export function About() {
             <Reveal delay={0.12}>
               <div className="max-w-2xl">
                 <p className="mb-5 text-sm leading-loose" style={{ color: "#5A3A30" }}>
-                  TFawe is a solo atelier shaped by one pair of hands, from first sketch and fabric selection to fittings, finishing, and final styling.
+                  Tunde Fawe’s journey into tailoring began in Toronto, where he developed his foundation in garment construction through basic sewing studies at George Brown College.
+
+Driven by a desire to deepen his understanding of tailoring and jacket construction, he continued his training in the United Kingdom, studying master jacket sewing under Lee Marsh Bespoke, a tailoring house associated with London’s Savile Row tradition.
+
+The experience introduced him to the discipline, precision, structure, and attention to detail that have long defined the world of traditional British tailoring.
+
+Those foundations became part of the philosophy behind TFAWE: bringing together the discipline of traditional tailoring with a contemporary approach to menswear and personal style.
+
+In 2022, Tunde founded TFAWE in Toronto, establishing the beginning of a modern custom menswear house built around individuality, fit, refinement, and timeless design.
+
+Today, as Founder and Creative Director, Tunde leads the creative vision of TFAWE, shaping its garments, aesthetic, and direction with the belief that a well made garment should do more than fit a man it should become part of his identity.
                 </p>
                 <p className="text-sm leading-loose" style={{ color: "#5A3A30" }}>
                   Each garment carries Tunde's eye for proportion, quiet detail, and personal service, making every piece feel considered from the inside out.

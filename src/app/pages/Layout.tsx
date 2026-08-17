@@ -12,6 +12,7 @@ const NAV = [
   { label: "Home",        to: "/" },
   { label: "About",       to: "/about" },
   { label: "Pricing",     to: "/pricing" },
+  { label: "Accessories", to: "/accessories" },
   { label: "Contact",     to: "/contact" },
 ];
 
@@ -159,7 +160,7 @@ export function Layout() {
             <div>
               <img src={logo} alt="TFawe" className="h-8 object-contain" />
               <p className="mt-1 text-xs" style={{ color: "rgba(179,144,133,0.4)" }}>
-                Toronto, Canada · Est. 2014
+                Toronto, Canada · Est. 2022
               </p>
             </div>
 

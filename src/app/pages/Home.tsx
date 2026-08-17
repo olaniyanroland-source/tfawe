@@ -64,7 +64,7 @@ export function Home() {
             className="mb-5 text-xs tracking-[0.4em] uppercase"
             style={{ color: "#F2D7CB", fontWeight: 700, textShadow: heroTextShadow }}
           >
-            Bespoke Tailoring &amp; Personal Styling · Toronto, Canada.
+            Custom-Made Tailoring &amp; Personal Styling · Toronto, Canada.
           </motion.p>
 
           <motion.h1
