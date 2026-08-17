@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import type { SyntheticEvent } from "react";
 import { motion, useInView } from "motion/react";
 import glass1 from "../../assets/glass1-optimized.jpg";
@@ -87,12 +87,9 @@ function buildWhatsAppLink(styleName: string) {
 }
 
 function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
-  const [loaded, setLoaded] = useState(false);
-
   function handleImageError(e: SyntheticEvent<HTMLImageElement>) {
     e.currentTarget.onerror = null;
     e.currentTarget.src = tfaweWorkImage;
-    setLoaded(true);
   }
 
   return (
@@ -105,18 +102,18 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
     >
       <motion.div
         className="glasses-card__image-wrap"
-        initial={{ clipPath: "inset(0 0 100% 0)" }}
-        whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.9, delay: index * 0.06 + 0.08, ease }}
+        transition={{ duration: 0.8, delay: index * 0.06 + 0.08, ease }}
       >
         <img
           src={item.image}
           alt={item.name}
           className="glasses-card__image"
-          onLoad={() => setLoaded(true)}
           onError={handleImageError}
-          style={{ opacity: loaded ? 1 : 0 }}
+          loading="eager"
+          decoding="async"
         />
       </motion.div>
       <motion.div
@@ -271,16 +268,18 @@ export function Accessories() {
 
         .glasses-card__image-wrap {
           aspect-ratio: 4 / 5;
+          height: clamp(420px, 39vw, 540px);
           background: #D9CBBF;
           overflow: hidden;
           margin-bottom: 22px;
         }
 
         .glasses-card__image {
+          display: block;
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: opacity 0.4s ease, transform 0.7s ease;
+          transition: transform 0.7s ease;
         }
 
         .glasses-card:hover .glasses-card__image {
@@ -372,6 +371,10 @@ export function Accessories() {
           .glasses-grid {
             grid-template-columns: 1fr;
             max-width: 560px;
+          }
+
+          .glasses-card__image-wrap {
+            height: clamp(360px, 118vw, 620px);
           }
         }
 
