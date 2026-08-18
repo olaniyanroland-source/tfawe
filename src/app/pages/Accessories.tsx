@@ -1,6 +1,13 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { SyntheticEvent } from "react";
 import { motion, useInView } from "motion/react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../components/ui/carousel";
 import glass1 from "../../assets/glass1-optimized.jpg";
 import glass2 from "../../assets/glass2-optimized.jpg";
 import glass3 from "../../assets/glass3-optimized.jpg";
@@ -17,45 +24,27 @@ type AccessoryItem = {
   id: string;
   name: string;
   detail: string;
-  image: string;
+  images: [string, string];
 };
 
 const GLASSES: AccessoryItem[] = [
   {
     id: "01",
     name: "The Aurelia",
-    detail: "Acetate, round frame, tortoise finish",
-    image: glass1,
+    detail: "Acetate frame with two editorial views",
+    images: [glass1, glass5],
   },
   {
     id: "02",
     name: "The Marchetti",
-    detail: "Titanium, square frame, brushed gold",
-    image: glass2,
+    detail: "Structured profile with front and side detail",
+    images: [glass2, glass3],
   },
   {
     id: "03",
     name: "The Solene",
-    detail: "Acetate, cat-eye, matte black",
-    image: glass3,
-  },
-  {
-    id: "04",
-    name: "The Laurent",
-    detail: "Acetate, rectangular frame, polished black",
-    image: glass4,
-  },
-  {
-    id: "05",
-    name: "The Bellamy",
-    detail: "Lightweight frame, refined everyday profile",
-    image: glass5,
-  },
-  {
-    id: "06",
-    name: "The Sable",
-    detail: "Statement silhouette with a clean tailored finish",
-    image: glass6,
+    detail: "Statement silhouette shown from two angles",
+    images: [glass4, glass6],
   },
 ];
 
@@ -87,9 +76,21 @@ function buildWhatsAppLink(styleName: string) {
 }
 
 function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
+  // Controls which of the two images is shown. Desktop swaps on
+  // hover; touch devices have no hover, so a tap toggles it and
+  // reverts after a short delay (a "peek" rather than a permanent swap).
+  const [showAlt, setShowAlt] = useState(false);
+  const touchTimerRef = useRef<number | null>(null);
+
   function handleImageError(e: SyntheticEvent<HTMLImageElement>) {
     e.currentTarget.onerror = null;
     e.currentTarget.src = tfaweWorkImage;
+  }
+
+  function handleTouchStart() {
+    setShowAlt(true);
+    if (touchTimerRef.current) window.clearTimeout(touchTimerRef.current);
+    touchTimerRef.current = window.setTimeout(() => setShowAlt(false), 1500);
   }
 
   return (
@@ -106,15 +107,34 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.8, delay: index * 0.06 + 0.08, ease }}
+        onMouseEnter={() => setShowAlt(true)}
+        onMouseLeave={() => setShowAlt(false)}
+        onTouchStart={handleTouchStart}
       >
-        <img
-          src={item.image}
-          alt={item.name}
-          className="glasses-card__image"
-          onError={handleImageError}
-          loading="eager"
-          decoding="async"
-        />
+        <figure className="glasses-card__main-photo">
+          <img
+            src={item.images[0]}
+            alt={`${item.name} primary view`}
+            className="glasses-card__image glasses-card__image--primary"
+            style={{ opacity: showAlt ? 0 : 1 }}
+            onError={handleImageError}
+            loading="eager"
+            decoding="async"
+          />
+          <img
+            src={item.images[1]}
+            alt={`${item.name} alternate view`}
+            className="glasses-card__image glasses-card__image--alt"
+            style={{ opacity: showAlt ? 1 : 0 }}
+            onError={handleImageError}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+        <div className="glasses-card__dots" aria-hidden="true">
+          <span className={`glasses-card__dot ${!showAlt ? "is-active" : ""}`} />
+          <span className={`glasses-card__dot ${showAlt ? "is-active" : ""}`} />
+        </div>
       </motion.div>
       <motion.div
         className="glasses-card__body"
@@ -251,39 +271,121 @@ export function Accessories() {
           max-width: 62ch;
         }
 
-        .glasses-grid {
+        .glasses-slider {
           max-width: 1280px;
           margin: 0 auto;
           padding: 0 24px;
-          display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 48px 28px;
+        }
+
+        .glasses-carousel {
+          position: relative;
+        }
+
+        .glasses-carousel__viewport {
+          overflow: visible;
+        }
+
+        .glasses-carousel__track {
+          align-items: stretch;
+        }
+
+        .glasses-carousel__slide {
+          flex-basis: min(82%, 560px);
+        }
+
+        .glasses-carousel__controls {
+          display: flex;
+          justify-content: flex-end;
+          gap: 12px;
+          margin-bottom: 22px;
+        }
+
+        .glasses-carousel__button {
+          position: static;
+          transform: none;
+          width: 42px;
+          height: 42px;
+          border-radius: 999px;
+          border: 1px solid var(--line);
+          background: rgba(245, 237, 231, 0.72);
+          color: var(--accent);
+          box-shadow: none;
+          transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .glasses-carousel__button:hover {
+          background: var(--accent);
+          border-color: var(--accent);
+          color: var(--paper);
+        }
+
+        .glasses-carousel__button:disabled {
+          opacity: 0.35;
         }
 
         .glasses-card {
           display: flex;
           flex-direction: column;
           min-width: 0;
+          height: 100%;
         }
 
         .glasses-card__image-wrap {
           aspect-ratio: 4 / 5;
-          height: clamp(420px, 39vw, 540px);
+          height: clamp(440px, 42vw, 620px);
           background: #D9CBBF;
           overflow: hidden;
           margin-bottom: 22px;
+          position: relative;
+          cursor: pointer;
+        }
+
+        .glasses-card__main-photo {
+          margin: 0;
+          width: 100%;
+          height: 100%;
+          position: relative;
         }
 
         .glasses-card__image {
+          position: absolute;
+          inset: 0;
           display: block;
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.7s ease;
+          transition: opacity 0.5s ease, transform 0.7s ease;
         }
 
-        .glasses-card:hover .glasses-card__image {
+        .glasses-card__image--alt {
+          transform: scale(1.02);
+        }
+
+        .glasses-card:hover .glasses-card__image--primary {
           transform: scale(1.04);
+        }
+
+        .glasses-card__dots {
+          position: absolute;
+          bottom: 16px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 7px;
+          z-index: 1;
+        }
+
+        .glasses-card__dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: rgba(236, 225, 216, 0.5);
+          transition: background 0.25s ease, transform 0.25s ease;
+        }
+
+        .glasses-card__dot.is-active {
+          background: var(--paper);
+          transform: scale(1.35);
         }
 
         .glasses-card__body {
@@ -368,9 +470,16 @@ export function Accessories() {
             gap: 26px;
           }
 
-          .glasses-grid {
-            grid-template-columns: 1fr;
+          .glasses-slider {
             max-width: 560px;
+          }
+
+          .glasses-carousel__controls {
+            justify-content: flex-start;
+          }
+
+          .glasses-carousel__slide {
+            flex-basis: 92%;
           }
 
           .glasses-card__image-wrap {
@@ -381,11 +490,13 @@ export function Accessories() {
         @media (prefers-reduced-motion: reduce) {
           .glasses-card__image,
           .accessories-page__closing-cta,
-          .glasses-card__cta {
+          .glasses-card__cta,
+          .glasses-carousel__button,
+          .glasses-card__dot {
             transition: none;
           }
 
-          .glasses-card:hover .glasses-card__image {
+          .glasses-card:hover .glasses-card__image--primary {
             transform: none;
           }
         }
@@ -441,10 +552,23 @@ export function Accessories() {
         </Reveal>
       </section>
 
-      <section className="glasses-grid" aria-label="Curated eyewear">
-        {GLASSES.map((item, index) => (
-          <GlassesCard key={item.id} item={item} index={index} />
-        ))}
+      <section className="glasses-slider" aria-label="Curated eyewear">
+        <Carousel
+          opts={{ align: "start", loop: true }}
+          className="glasses-carousel"
+        >
+          <div className="glasses-carousel__controls" aria-label="Eyewear slider controls">
+            <CarouselPrevious className="glasses-carousel__button" />
+            <CarouselNext className="glasses-carousel__button" />
+          </div>
+          <CarouselContent className="glasses-carousel__track">
+            {GLASSES.map((item, index) => (
+              <CarouselItem key={item.id} className="glasses-carousel__slide">
+                <GlassesCard item={item} index={index} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </section>
 
       <Reveal y={24} className="accessories-page__closing">
