@@ -7,6 +7,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 import { motion, AnimatePresence } from "motion/react";
 import { ElfsightWidget } from "../components/ElfsightWidget";
+import { OrganizationSchema, Seo } from "../components/Seo";
 
 const NAV = [
   { label: "Home",        to: "/" },
@@ -55,6 +56,8 @@ export function Layout() {
 
   return (
     <div style={{ fontFamily: "'Raleway', sans-serif", background: "#ECE1D8" }}>
+      <Seo />
+      <OrganizationSchema />
       {/* ── Nav ── */}
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"

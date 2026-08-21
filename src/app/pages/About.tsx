@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight, Scissors, Star, Award, Users } from "lucide-react";
-import ceoImage from "../../assets/CEO.png";
+import ceoImage from "../../assets/ceoTfawe.JPG";
 import { ElfsightWidget } from "../components/ElfsightWidget";
 import tailoringCraft from "../../assets/tfawework.png";
 
