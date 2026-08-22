@@ -45,8 +45,6 @@ const INFO = [
 
 const SOCIALS = [
   { label: "Instagram", handle: "@tfawe_",   href: "https://www.instagram.com/tfawe_/" },
-  { label: "Pinterest", handle: "TFawe",    href: "#" },
-  { label: "LinkedIn",  handle: "TFawe",   href: "#" },
 ];
 
 export function Contact() {

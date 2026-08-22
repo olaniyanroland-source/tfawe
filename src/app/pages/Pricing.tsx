@@ -52,13 +52,12 @@ const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: s
 
 export function Pricing() {
   const [activeTab, setActiveTab] = useState<ConstructionKey>("fused");
-  const [currency, setCurrency] = useState<'CAD'|'USD'|'GBP'|'EUR'|'NGN'>('CAD');
+  const [currency, setCurrency] = useState<'CAD'|'USD'|'GBP'|'EUR'>('CAD');
   const RATES: Record<string, number> = {
     CAD: 1,     // base
     USD: 0.74,  // 1 CAD -> 0.74 USD (approx)
     GBP: 0.59,  // 1 CAD -> 0.59 GBP (approx)
     EUR: 0.68,  // 1 CAD -> 0.68 EUR (approx)
-    NGN: 450,   // 1 CAD -> 450 NGN (approx)
   };
 
   function formatPrice(raw: string) {
@@ -152,7 +151,7 @@ export function Pricing() {
           {/* Currency selector (on its own line) */}
           <Reveal delay={0.02}>
             <div className="flex flex-wrap justify-center gap-2 mb-6">
-              {(['CAD','USD','GBP','EUR','NGN'] as const).map(c => (
+              {(['CAD','USD','GBP','EUR'] as const).map(c => (
                 <button
                   key={c}
                   onClick={() => setCurrency(c)}

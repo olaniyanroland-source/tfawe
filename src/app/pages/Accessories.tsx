@@ -1,13 +1,6 @@
 import { useRef, useState } from "react";
 import type { SyntheticEvent } from "react";
 import { motion, useInView } from "motion/react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../components/ui/carousel";
 import glass1 from "../../assets/glass1-optimized.jpg";
 import glass2 from "../../assets/glass2-optimized.jpg";
 import glass3 from "../../assets/glass3-optimized.jpg";
@@ -277,50 +270,10 @@ export function Accessories() {
           padding: 0 24px;
         }
 
-        .glasses-carousel {
-          position: relative;
-        }
-
-        .glasses-carousel__viewport {
-          overflow: visible;
-        }
-
-        .glasses-carousel__track {
-          align-items: stretch;
-        }
-
-        .glasses-carousel__slide {
-          flex-basis: min(82%, 560px);
-        }
-
-        .glasses-carousel__controls {
-          display: flex;
-          justify-content: flex-end;
-          gap: 12px;
-          margin-bottom: 22px;
-        }
-
-        .glasses-carousel__button {
-          position: static;
-          transform: none;
-          width: 42px;
-          height: 42px;
-          border-radius: 999px;
-          border: 1px solid var(--line);
-          background: rgba(245, 237, 231, 0.72);
-          color: var(--accent);
-          box-shadow: none;
-          transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-        }
-
-        .glasses-carousel__button:hover {
-          background: var(--accent);
-          border-color: var(--accent);
-          color: var(--paper);
-        }
-
-        .glasses-carousel__button:disabled {
-          opacity: 0.35;
+        .glasses-list {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 32px;
         }
 
         .glasses-card {
@@ -470,20 +423,49 @@ export function Accessories() {
             gap: 26px;
           }
 
-          .glasses-slider {
-            max-width: 560px;
+          .glasses-list {
+            grid-template-columns: 1fr;
+            gap: 0;
           }
 
-          .glasses-carousel__controls {
-            justify-content: flex-start;
+          .glasses-card {
+            display: grid;
+            grid-template-columns: minmax(110px, 38%) 1fr;
+            gap: 18px;
+            padding: 20px 0;
+            border-top: 1px solid var(--line);
           }
 
-          .glasses-carousel__slide {
-            flex-basis: 92%;
+          .glasses-card:last-child {
+            border-bottom: 1px solid var(--line);
           }
 
           .glasses-card__image-wrap {
-            height: clamp(360px, 118vw, 620px);
+            height: auto;
+            min-height: 160px;
+            margin: 0;
+          }
+
+          .glasses-card__body {
+            border-top: 0;
+            padding-top: 0;
+          }
+
+          .glasses-card__number {
+            font-size: 30px;
+            margin-bottom: 4px;
+          }
+
+          .glasses-card__name {
+            font-size: 22px;
+          }
+
+          .glasses-card__detail {
+            margin-bottom: 12px;
+          }
+
+          .glasses-card__dots {
+            display: none;
           }
         }
 
@@ -491,7 +473,6 @@ export function Accessories() {
           .glasses-card__image,
           .accessories-page__closing-cta,
           .glasses-card__cta,
-          .glasses-carousel__button,
           .glasses-card__dot {
             transition: none;
           }
@@ -553,22 +534,11 @@ export function Accessories() {
       </section>
 
       <section className="glasses-slider" aria-label="Curated eyewear">
-        <Carousel
-          opts={{ align: "start", loop: true }}
-          className="glasses-carousel"
-        >
-          <div className="glasses-carousel__controls" aria-label="Eyewear slider controls">
-            <CarouselPrevious className="glasses-carousel__button" />
-            <CarouselNext className="glasses-carousel__button" />
-          </div>
-          <CarouselContent className="glasses-carousel__track">
-            {GLASSES.map((item, index) => (
-              <CarouselItem key={item.id} className="glasses-carousel__slide">
-                <GlassesCard item={item} index={index} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        <div className="glasses-list">
+          {GLASSES.map((item, index) => (
+            <GlassesCard key={item.id} item={item} index={index} />
+          ))}
+        </div>
       </section>
 
       <Reveal y={24} className="accessories-page__closing">

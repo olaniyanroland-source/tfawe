@@ -1,3 +1,9 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+@import './globals.css';
+
+/* Direct event embeds fit neatly without leaving extra space below the footer links. */
+.calendly-inline-widget {
+  height: 700px;
+}

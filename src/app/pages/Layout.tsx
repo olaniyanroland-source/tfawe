@@ -3,10 +3,7 @@ import logo from "../../assets/transparent2.png";
 import { Outlet, NavLink, useLocation, Link } from "react-router";
 import { Menu, X } from "lucide-react";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import PinterestIcon from "@mui/icons-material/Pinterest";
 import { motion, AnimatePresence } from "motion/react";
-import { ElfsightWidget } from "../components/ElfsightWidget";
 import { OrganizationSchema, Seo } from "../components/Seo";
 
 const NAV = [
@@ -19,8 +16,12 @@ const NAV = [
 
 const SOCIALS = [
   { label: "Instagram", href: "https://www.instagram.com/tfawe_/", Icon: InstagramIcon },
-  { label: "Pinterest", href: "#", Icon: PinterestIcon },
-  { label: "LinkedIn", href: "#", Icon: LinkedInIcon },
+];
+
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", to: "/privacy-policy" },
+  { label: "Terms of Use", to: "/terms-of-use" },
+  { label: "Cookie Policy", to: "/cookie-policy" },
 ];
 
 export function Layout() {
@@ -37,10 +38,11 @@ export function Layout() {
   }, [location.pathname]);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
+    const updateScrolled = () => setScrolled(window.scrollY > 50);
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrolled);
+  }, [location.pathname]);
 
   const alwaysDark = !isHome;
   const navBg = alwaysDark || scrolled
@@ -151,7 +153,6 @@ export function Layout() {
       <main>
         <Outlet />
       </main>
-      <ElfsightWidget appId="ee4dd7bb-dfe1-4def-9c73-19281fa0b6c1" />
 
       {/* ── Footer ── */}
       <footer className="py-14 px-6 lg:px-14" style={{ background: "#1A0E0B" }}>
@@ -245,9 +246,25 @@ export function Layout() {
             </div>
           </div>
 
-          <p className="text-xs text-center" style={{ color: "rgba(179,144,133,0.25)" }}>
-            © {new Date().getFullYear()} TFawe. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center gap-4 text-center">
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-3" aria-label="Legal">
+              {LEGAL_LINKS.map(({ label, to }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="text-xs transition-colors duration-200"
+                  style={{ color: "rgba(179,144,133,0.45)" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#B39085")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(179,144,133,0.45)")}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <p className="text-xs" style={{ color: "rgba(179,144,133,0.25)" }}>
+              © {new Date().getFullYear()} TFawe. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

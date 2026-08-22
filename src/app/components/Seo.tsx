@@ -34,6 +34,18 @@ const PAGES: Record<string, PageMetadata> = {
     title: "Contact TFawe | Custom Menswear in Toronto",
     description: "Contact TFawe in Toronto to discuss bespoke suits, personal styling, appointments, and custom menswear services.",
   },
+  "/privacy-policy": {
+    title: "Privacy Policy | TFawe",
+    description: "Learn how TFawe collects, uses, and protects personal information.",
+  },
+  "/terms-of-use": {
+    title: "Terms of Use | TFawe",
+    description: "Read the terms governing use of the TFawe website.",
+  },
+  "/cookie-policy": {
+    title: "Cookie Policy | TFawe",
+    description: "Learn how TFawe uses cookies and similar technologies on this website.",
+  },
 };
 
 function setMeta(selector: string, attribute: "name" | "property", key: string, content: string) {

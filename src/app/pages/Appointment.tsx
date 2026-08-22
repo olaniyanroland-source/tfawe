@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "react-router";
-import { motion, useInView, AnimatePresence } from "motion/react";
-import { ArrowRight, MapPin, Clock, Calendar, CheckCircle, Ruler, CreditCard } from "lucide-react";
+import { motion, useInView } from "motion/react";
+import { ArrowRight, MapPin, Clock, Calendar, Ruler, CreditCard } from "lucide-react";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -19,38 +19,51 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
   );
 }
 
-const SERVICES = [
-  "Personal Styling Session",
-  "Wardrobe Consultation",
-  "Bespoke Suit Fitting",
-  "Bridal & Event Styling",
-  "Colour Analysis",
-  "Virtual Styling",
-];
-
-const TIME_SLOTS = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"];
-
 const STEPS = [
-  { num: "01", title: "Fill in the form", body: "Tell us your preferred date, time, and what you're looking for." },
-  { num: "02", title: "We confirm",       body: "Our team will reach out within 24 hours to confirm your slot." },
+  { num: "01", title: "Choose a time", body: "Select the appointment type and time that works best for you." },
+  { num: "02", title: "Confirm your details", body: "Add your details to reserve your selected appointment slot." },
   { num: "03", title: "Meet your stylist", body: "Arrive at our Toronto studio for a relaxed, unhurried session." },
   { num: "04", title: "Your garment",     body: "We begin crafting. Three fittings follow before the final reveal." },
 ];
 
+const CALENDLY_URL = "https://calendly.com/olaniyanroland/30min?background_color=ece1d8&text_color=794137&primary_color=b39085";
+
 export function Appointment() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", date: "", time: "", notes: "" });
-  const [sent, setSent] = useState(false);
+  const calendlyRef = useRef<HTMLDivElement>(null);
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSent(true);
-    setForm({ name: "", email: "", phone: "", service: "", date: "", time: "", notes: "" });
-  }
+  useEffect(() => {
+    const scriptId = "calendly-widget-script";
+    const initializeCalendly = () => {
+      window.requestAnimationFrame(() => {
+        const parentElement = calendlyRef.current;
+        const calendly = (window as Window & {
+          Calendly?: {
+            initInlineWidget: (options: { url: string; parentElement: HTMLElement }) => void;
+          };
+        }).Calendly;
 
-  const field = "w-full px-4 py-3.5 text-sm outline-none";
-  const fieldStyle = { background: "#F5EDE7", border: "1px solid rgba(121,65,55,.2)", color: "#2C1810" };
-  const labelClass = "block mb-2 text-xs tracking-[0.18em] uppercase";
-  const labelStyle = { color: "#794137" };
+        if (parentElement && !parentElement.querySelector("iframe") && calendly) {
+          calendly.initInlineWidget({ url: CALENDLY_URL, parentElement });
+        }
+      });
+    };
+
+    const existingScript = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (existingScript) {
+      existingScript.addEventListener("load", initializeCalendly);
+      initializeCalendly();
+      return () => existingScript.removeEventListener("load", initializeCalendly);
+    }
+
+    const script = document.createElement("script");
+    script.id = scriptId;
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.async = true;
+    script.addEventListener("load", initializeCalendly);
+    document.body.appendChild(script);
+
+    return () => script.removeEventListener("load", initializeCalendly);
+  }, []);
 
   return (
     <div style={{ background: "#ECE1D8" }}>
@@ -214,13 +227,13 @@ export function Appointment() {
         </div>
       </section>
 
-      {/* ── BOOKING FORM ── */}
+      {/* ── BOOKING ── */}
       <section className="py-24 px-6 lg:px-14" style={{ background: "#ECE1D8" }}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
           {/* Left info */}
           <div className="lg:sticky lg:top-28">
             <Reveal>
-              <p className="mb-3 text-xs tracking-[0.3em] uppercase" style={{ color: "#794137" }}>Booking Form</p>
+              <p className="mb-3 text-xs tracking-[0.3em] uppercase" style={{ color: "#794137" }}>Book Your Appointment</p>
             </Reveal>
             <Reveal delay={0.1}>
               <h2 className="mb-6" style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,3.5vw,3rem)", fontWeight: 400, color: "#2C1810" }}>
@@ -231,7 +244,7 @@ export function Appointment() {
             <Reveal delay={0.15}><div className="w-10 h-px mb-6" style={{ background: "#B39085" }} /></Reveal>
             <Reveal delay={0.2}>
               <p className="mb-8 text-sm leading-loose" style={{ color: "#5A3A30" }}>
-                Complete the form and our team will confirm your booking within 24 hours. Each session is entirely unhurried and tailored to you.
+                Choose a time that suits you, then complete your booking directly through our scheduling calendar. Each session is entirely unhurried and tailored to you.
               </p>
             </Reveal>
             <Reveal y={0}>
@@ -252,114 +265,16 @@ export function Appointment() {
             </Reveal>
           </div>
 
-          {/* Form */}
-          <div>
-            <AnimatePresence>
-              {sent && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="mb-8 p-6 flex flex-col items-center text-center gap-3"
-                  style={{ background: "#794137" }}
-                >
-                  <CheckCircle size={28} color="#ECE1D8" />
-                  <p className="text-sm" style={{ color: "#ECE1D8" }}>
-                    Your appointment request has been received. We will confirm your slot within 24 hours.
-                  </p>
-                  <button
-                    onClick={() => setSent(false)}
-                    className="mt-2 text-xs tracking-[0.15em] uppercase"
-                    style={{ color: "rgba(236,225,216,.65)" }}
-                  >
-                    Book another
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {!sent && (
-              <form onSubmit={handleSubmit} className="p-8 lg:p-10 space-y-5" style={{ background: "#F5EDE7" }}>
-                <Reveal delay={0.05}>
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className={labelClass} style={labelStyle}>Full Name</label>
-                      <input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
-                        placeholder="Sophia Laurent" className={field} style={fieldStyle} />
-                    </div>
-                    <div>
-                      <label className={labelClass} style={labelStyle}>Email</label>
-                      <input required type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
-                        placeholder="sophia@email.com" className={field} style={fieldStyle} />
-                    </div>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={0.1}>
-                  <div>
-                    <label className={labelClass} style={labelStyle}>Phone (optional)</label>
-                    <input value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })}
-                      placeholder="+44 7700 900000" className={field} style={fieldStyle} />
-                  </div>
-                </Reveal>
-
-                <Reveal delay={0.15}>
-                  <div>
-                    <label className={labelClass} style={labelStyle}>Service</label>
-                    <select required value={form.service} onChange={e => setForm({ ...form, service: e.target.value })}
-                      className={`${field} appearance-none cursor-pointer`}
-                      style={{ ...fieldStyle, color: form.service ? "#2C1810" : "#9A7B73" }}>
-                      <option value="" disabled>Select a service…</option>
-                      {SERVICES.map(s => <option key={s} value={s}>{s}</option>)}
-                    </select>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={0.2}>
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className={labelClass} style={labelStyle}>Preferred Date</label>
-                      <input required type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })}
-                        className={field} style={fieldStyle} />
-                    </div>
-                    <div>
-                      <label className={labelClass} style={labelStyle}>Preferred Time</label>
-                      <select required value={form.time} onChange={e => setForm({ ...form, time: e.target.value })}
-                        className={`${field} appearance-none cursor-pointer`}
-                        style={{ ...fieldStyle, color: form.time ? "#2C1810" : "#9A7B73" }}>
-                        <option value="" disabled>Select time…</option>
-                        {TIME_SLOTS.map(t => <option key={t} value={t}>{t}</option>)}
-                      </select>
-                    </div>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={0.25}>
-                  <div>
-                    <label className={labelClass} style={labelStyle}>Additional Notes (optional)</label>
-                    <textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })}
-                      rows={4} placeholder="Tell us about your style goals or any special requirements…"
-                      className={`${field} resize-none`} style={fieldStyle} />
-                  </div>
-                </Reveal>
-
-                <Reveal delay={0.3}>
-                  <motion.button
-                    type="submit"
-                    whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.985 }}
-                    className="w-full py-4 text-xs tracking-[0.22em] uppercase flex items-center justify-center gap-2 transition-colors duration-300"
-                    style={{ background: "#794137", color: "#ECE1D8" }}
-                    onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
-                    onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
-                  >
-                    Request Appointment <ArrowRight size={13} />
-                  </motion.button>
-                </Reveal>
-
-                <p className="text-xs text-center" style={{ color: "rgba(121,65,55,.45)" }}>
-                  We respond within 24 hours. A $50 consultation fee secures your appointment.
-                </p>
-              </form>
-            )}
-          </div>
+          <Reveal delay={0.1}>
+            <div className="overflow-hidden" style={{ background: "#F5EDE7" }}>
+              <div
+                ref={calendlyRef}
+                className="calendly-inline-widget"
+                data-url={CALENDLY_URL}
+                style={{ minWidth: 320 }}
+              />
+            </div>
+          </Reveal>
         </div>
       </section>
 
