@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import type { SyntheticEvent, TouchEvent } from "react";
+import type { PointerEvent, SyntheticEvent, TouchEvent } from "react";
 import { motion, useInView } from "motion/react";
 import glass1 from "../../assets/glass1-optimized.jpg";
 import glass2 from "../../assets/glass2-optimized.jpg";
@@ -102,6 +102,18 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
     setIsTouching(false);
   }
 
+  // Move the zoom origin with the pointer, so the area being inspected stays
+  // beneath the cursor instead of simply enlarging from the image centre.
+  function handlePointerMove(e: PointerEvent<HTMLDivElement>) {
+    if (e.pointerType === "touch") return;
+
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - bounds.left) / bounds.width) * 100;
+    const y = ((e.clientY - bounds.top) / bounds.height) * 100;
+    e.currentTarget.style.setProperty("--zoom-x", `${Math.max(0, Math.min(100, x))}%`);
+    e.currentTarget.style.setProperty("--zoom-y", `${Math.max(0, Math.min(100, y))}%`);
+  }
+
   return (
     <motion.article
       className="glasses-card"
@@ -118,6 +130,11 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
         transition={{ duration: 0.8, delay: index * 0.06 + 0.08, ease }}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={(e) => {
+          e.currentTarget.style.removeProperty("--zoom-x");
+          e.currentTarget.style.removeProperty("--zoom-y");
+        }}
         onTouchCancel={() => {
           touchStartX.current = null;
           setIsTouching(false);
@@ -315,7 +332,7 @@ export function Accessories() {
         }
 
         .glasses-slider {
-          max-width: 1280px;
+          max-width: 1440px;
           margin: 0 auto;
           padding: 0 24px;
         }
@@ -323,7 +340,7 @@ export function Accessories() {
         .glasses-list {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 32px;
+          gap: 24px;
         }
 
         .glasses-card {
@@ -334,8 +351,10 @@ export function Accessories() {
         }
 
         .glasses-card__image-wrap {
-          aspect-ratio: 4 / 5;
-          height: clamp(440px, 42vw, 620px);
+          /* The source photographs are 3:2. Matching that ratio presents
+             the complete, centred product rather than cropping its edges. */
+          aspect-ratio: 3 / 2;
+          height: auto;
           background: #D9CBBF;
           overflow: hidden;
           margin-bottom: 22px;
@@ -357,20 +376,22 @@ export function Accessories() {
           display: block;
           width: 100%;
           height: 100%;
-          object-fit: cover;
-          transition: opacity 0.5s ease, transform 0.7s ease;
+          object-fit: contain;
+          object-position: center;
+          transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+          transition: opacity 0.5s ease, transform 0.45s ease;
         }
 
         .glasses-card__image--alt {
-          transform: scale(1.02);
+          transform: scale(1);
         }
 
         .glasses-card:hover .glasses-card__image {
-          transform: scale(1.04);
+          transform: scale(1.28);
         }
 
         .glasses-card__image-wrap.is-touching .glasses-card__image {
-          transform: scale(1.04);
+          transform: scale(1.12);
         }
 
         .glasses-card__dots {
@@ -570,7 +591,7 @@ export function Accessories() {
           .glasses-card__image-wrap {
             height: auto;
             min-height: 0;
-            aspect-ratio: 4 / 5;
+            aspect-ratio: 3 / 2;
             margin: 0;
           }
 
