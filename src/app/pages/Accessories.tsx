@@ -198,20 +198,13 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
         <p className="glasses-card__price">{item.price}</p>
         <div className="glasses-card__actions">
           <a
-            href={buildWhatsAppLink(item.name, "interested in")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glasses-card__cta glasses-card__cta--secondary"
-          >
-            Inquire
-          </a>
-          <a
             href={buildWhatsAppLink(item.name, "ready to buy")}
             target="_blank"
             rel="noopener noreferrer"
             className="glasses-card__cta glasses-card__cta--primary"
           >
-            Buy
+            <span>Buy this pair</span>
+            <span className="glasses-card__cta-arrow" aria-hidden="true">↗</span>
           </a>
         </div>
       </motion.div>
@@ -515,42 +508,57 @@ export function Accessories() {
 
         .glasses-card__actions {
           display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
+          width: 100%;
         }
 
         .glasses-card__cta {
-          display: inline-flex;
+          display: flex;
           align-items: center;
-          justify-content: center;
+          justify-content: space-between;
+          width: 100%;
           text-decoration: none;
           font-size: 12px;
-          letter-spacing: 0.16em;
+          letter-spacing: 0.18em;
           text-transform: uppercase;
-          min-height: 40px;
-          padding: 0 16px;
-          border: 1px solid var(--accent);
-          transition: background 0.2s ease, color 0.2s ease;
+          min-height: 52px;
+          padding: 0 18px 0 20px;
+          border: 1px solid var(--deep);
+          transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
         }
 
         .glasses-card__cta--primary {
-          background: var(--accent);
+          background: var(--deep);
           color: var(--paper);
         }
 
-        .glasses-card__cta--secondary {
-          color: var(--accent);
-          background: transparent;
+        .glasses-card__cta-arrow {
+          display: grid;
+          place-items: center;
+          width: 28px;
+          height: 28px;
+          border: 1px solid rgba(236, 225, 216, 0.48);
+          border-radius: 50%;
+          font-size: 16px;
+          line-height: 1;
+          transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
         }
 
         .glasses-card__cta--primary:hover {
-          background: var(--deep);
-          border-color: var(--deep);
+          background: var(--accent);
+          border-color: var(--accent);
+          transform: translateY(-2px);
         }
 
-        .glasses-card__cta--secondary:hover {
-          color: var(--paper);
-          background: var(--accent);
+        .glasses-card__cta--primary:hover .glasses-card__cta-arrow {
+          color: var(--accent);
+          background: var(--paper);
+          border-color: var(--paper);
+          transform: rotate(45deg);
+        }
+
+        .glasses-card__cta:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: 3px;
         }
 
         .accessories-page__closing {
@@ -656,8 +664,14 @@ export function Accessories() {
           .glasses-card__cta {
             font-size: 10px;
             letter-spacing: 0.1em;
-            min-height: 36px;
-            padding: 0 11px;
+            min-height: 44px;
+            padding: 0 13px 0 15px;
+          }
+
+          .glasses-card__cta-arrow {
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
           }
         }
 
