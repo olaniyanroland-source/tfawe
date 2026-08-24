@@ -332,15 +332,15 @@ export function Accessories() {
         }
 
         .glasses-slider {
-          max-width: 1440px;
+          max-width: 1480px;
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 12px 24px 0;
         }
 
         .glasses-list {
           display: grid;
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 24px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 52px 28px;
         }
 
         .glasses-card {
@@ -348,6 +348,24 @@ export function Accessories() {
           flex-direction: column;
           min-width: 0;
           height: 100%;
+          padding: 14px;
+          background: rgba(245, 237, 231, 0.7);
+          border: 1px solid var(--line);
+          box-shadow: 0 18px 40px rgba(44, 24, 16, 0.055);
+          transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .glasses-card:hover {
+          transform: translateY(-7px);
+          box-shadow: 0 25px 55px rgba(44, 24, 16, 0.12);
+        }
+
+        /* The third piece is centred beneath the first pair, giving the
+           three-product collection a deliberate editorial composition. */
+        .glasses-card:last-child {
+          grid-column: 1 / -1;
+          width: calc((100% - 28px) / 2);
+          justify-self: center;
         }
 
         .glasses-card__image-wrap {
@@ -357,7 +375,7 @@ export function Accessories() {
           height: auto;
           background: #D9CBBF;
           overflow: hidden;
-          margin-bottom: 22px;
+          margin-bottom: 24px;
           position: relative;
           cursor: pointer;
           touch-action: pan-y;
@@ -462,7 +480,7 @@ export function Accessories() {
 
         .glasses-card__body {
           border-top: 1px solid var(--line);
-          padding-top: 18px;
+          padding: 20px 6px 6px;
         }
 
         .glasses-card__number {
@@ -588,6 +606,12 @@ export function Accessories() {
             box-shadow: 0 8px 24px rgba(44, 24, 16, 0.06);
           }
 
+          .glasses-card:last-child {
+            grid-column: auto;
+            width: auto;
+            justify-self: auto;
+          }
+
           .glasses-card__image-wrap {
             height: auto;
             min-height: 0;
@@ -656,6 +680,35 @@ export function Accessories() {
 
           .glasses-card__detail {
             display: none;
+          }
+        }
+
+        /* One generous column on phones keeps the eyewear imagery large and
+           easy to inspect, instead of reducing it to two small tiles. */
+        @media (max-width: 640px) {
+          .glasses-slider {
+            padding: 0 18px;
+          }
+
+          .glasses-list {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+
+          .glasses-card {
+            width: 100%;
+          }
+
+          .glasses-card__image-wrap {
+            aspect-ratio: 3 / 2;
+          }
+
+          .glasses-card__body {
+            padding: 17px;
+          }
+
+          .glasses-card__detail {
+            display: block;
           }
         }
 
