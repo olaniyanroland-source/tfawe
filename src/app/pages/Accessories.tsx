@@ -31,14 +31,14 @@ const GLASSES: AccessoryItem[] = [
   },
   {
     id: "02",
-    name: "Àṣẹ Dúdú",
+    name: "Ọba Noir",
     detail: "Structured profile with front and side detail",
     price: "$80 CAD",
     images: [glass2, glass3],
   },
   {
     id: "03",
-    name: "Àṣẹ Búlù ",
+    name: "Ọba Azure",
     detail: "Statement silhouette shown from two angles",
     price: "$80 CAD",
     images: [glass4, glass6],
