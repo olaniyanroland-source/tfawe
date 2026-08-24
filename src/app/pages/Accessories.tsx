@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import type { SyntheticEvent } from "react";
+import type { SyntheticEvent, TouchEvent } from "react";
 import { motion, useInView } from "motion/react";
 import glass1 from "../../assets/glass1-optimized.jpg";
 import glass2 from "../../assets/glass2-optimized.jpg";
@@ -17,26 +17,30 @@ type AccessoryItem = {
   id: string;
   name: string;
   detail: string;
+  price: string;
   images: [string, string];
 };
 
 const GLASSES: AccessoryItem[] = [
   {
     id: "01",
-    name: "The Aurelia",
+    name: "Ọla",
     detail: "Acetate frame with two editorial views",
+    price: "$120 CAD",
     images: [glass1, glass5],
   },
   {
     id: "02",
-    name: "The Marchetti",
+    name: "Àṣẹ Dúdú",
     detail: "Structured profile with front and side detail",
+    price: "$80 CAD",
     images: [glass2, glass3],
   },
   {
     id: "03",
-    name: "The Solene",
+    name: "Àṣẹ Búlù ",
     detail: "Statement silhouette shown from two angles",
+    price: "$80 CAD",
     images: [glass4, glass6],
   },
 ];
@@ -63,27 +67,39 @@ function Reveal({ children, delay = 0, y = 28, className = "" }: {
   );
 }
 
-function buildWhatsAppLink(styleName: string) {
-  const message = `Hi, I'm interested in ${styleName}`;
+function buildWhatsAppLink(styleName: string, action = "interested in") {
+  const message = "Hi, I'm " + action + " " + styleName + ".";
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
 function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
-  // Controls which of the two images is shown. Desktop swaps on
-  // hover; touch devices have no hover, so a tap toggles it and
-  // reverts after a short delay (a "peek" rather than a permanent swap).
+  // The primary image stays in view on hover. On touch devices, a horizontal
+  // swipe changes the view: left for the alternate image and right for primary.
   const [showAlt, setShowAlt] = useState(false);
-  const touchTimerRef = useRef<number | null>(null);
+  const [isTouching, setIsTouching] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   function handleImageError(e: SyntheticEvent<HTMLImageElement>) {
     e.currentTarget.onerror = null;
     e.currentTarget.src = tfaweWorkImage;
   }
 
-  function handleTouchStart() {
-    setShowAlt(true);
-    if (touchTimerRef.current) window.clearTimeout(touchTimerRef.current);
-    touchTimerRef.current = window.setTimeout(() => setShowAlt(false), 1500);
+  function handleTouchStart(e: TouchEvent<HTMLDivElement>) {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+    setIsTouching(true);
+  }
+
+  function handleTouchEnd(e: TouchEvent<HTMLDivElement>) {
+    const startX = touchStartX.current;
+    const endX = e.changedTouches[0]?.clientX;
+
+    if (startX !== null && endX !== undefined) {
+      const distance = endX - startX;
+      if (Math.abs(distance) > 35) setShowAlt(distance < 0);
+    }
+
+    touchStartX.current = null;
+    setIsTouching(false);
   }
 
   return (
@@ -95,14 +111,17 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
       transition={{ duration: 0.75, delay: index * 0.06, ease }}
     >
       <motion.div
-        className="glasses-card__image-wrap"
+        className={["glasses-card__image-wrap", isTouching ? "is-touching" : ""].filter(Boolean).join(" ")}
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.8, delay: index * 0.06 + 0.08, ease }}
-        onMouseEnter={() => setShowAlt(true)}
-        onMouseLeave={() => setShowAlt(false)}
         onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={() => {
+          touchStartX.current = null;
+          setIsTouching(false);
+        }}
       >
         <figure className="glasses-card__main-photo">
           <img
@@ -128,6 +147,26 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
           <span className={`glasses-card__dot ${!showAlt ? "is-active" : ""}`} />
           <span className={`glasses-card__dot ${showAlt ? "is-active" : ""}`} />
         </div>
+        <div className="glasses-card__image-controls">
+          <button
+            type="button"
+            className="glasses-card__image-control"
+            onClick={() => setShowAlt(false)}
+            aria-label={`Show the first view of ${item.name}`}
+            aria-pressed={!showAlt}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+          <button
+            type="button"
+            className="glasses-card__image-control"
+            onClick={() => setShowAlt(true)}
+            aria-label={`Show the second view of ${item.name}`}
+            aria-pressed={showAlt}
+          >
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
       </motion.div>
       <motion.div
         className="glasses-card__body"
@@ -139,14 +178,25 @@ function GlassesCard({ item, index }: { item: AccessoryItem; index: number }) {
         <p className="glasses-card__number">{item.id}</p>
         <h3 className="glasses-card__name">{item.name}</h3>
         <p className="glasses-card__detail">{item.detail}</p>
-        <a
-          href={buildWhatsAppLink(item.name)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="glasses-card__cta"
-        >
-          Inquire on WhatsApp
-        </a>
+        <p className="glasses-card__price">{item.price}</p>
+        <div className="glasses-card__actions">
+          <a
+            href={buildWhatsAppLink(item.name, "interested in")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glasses-card__cta glasses-card__cta--secondary"
+          >
+            Inquire
+          </a>
+          <a
+            href={buildWhatsAppLink(item.name, "ready to buy")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="glasses-card__cta glasses-card__cta--primary"
+          >
+            Buy
+          </a>
+        </div>
       </motion.div>
     </motion.article>
   );
@@ -291,6 +341,7 @@ export function Accessories() {
           margin-bottom: 22px;
           position: relative;
           cursor: pointer;
+          touch-action: pan-y;
         }
 
         .glasses-card__main-photo {
@@ -314,7 +365,11 @@ export function Accessories() {
           transform: scale(1.02);
         }
 
-        .glasses-card:hover .glasses-card__image--primary {
+        .glasses-card:hover .glasses-card__image {
+          transform: scale(1.04);
+        }
+
+        .glasses-card__image-wrap.is-touching .glasses-card__image {
           transform: scale(1.04);
         }
 
@@ -326,6 +381,49 @@ export function Accessories() {
           display: flex;
           gap: 7px;
           z-index: 1;
+        }
+
+        .glasses-card__image-controls {
+          position: absolute;
+          inset: 0 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          pointer-events: none;
+          z-index: 2;
+        }
+
+        .glasses-card__image-control {
+          display: grid;
+          width: 38px;
+          height: 38px;
+          place-items: center;
+          padding: 0;
+          color: var(--paper);
+          background: rgba(26, 14, 11, 0.48);
+          border: 1px solid rgba(236, 225, 216, 0.56);
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 20px;
+          line-height: 1;
+          opacity: 0;
+          pointer-events: auto;
+          transition: background 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .glasses-card__image-wrap:hover .glasses-card__image-control,
+        .glasses-card__image-control:focus-visible {
+          opacity: 1;
+        }
+
+        .glasses-card__image-control:hover {
+          background: var(--accent);
+          transform: scale(1.06);
+        }
+
+        .glasses-card__image-control:focus-visible {
+          outline: 2px solid var(--paper);
+          outline-offset: 3px;
         }
 
         .glasses-card__dot {
@@ -369,21 +467,51 @@ export function Accessories() {
           line-height: 1.55;
         }
 
+        .glasses-card__price {
+          font-family: var(--font-display);
+          font-size: 20px;
+          color: var(--ink);
+          margin: 0 0 18px;
+        }
+
+        .glasses-card__actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
         .glasses-card__cta {
           display: inline-flex;
-          width: fit-content;
-          color: var(--accent);
+          align-items: center;
+          justify-content: center;
           text-decoration: none;
           font-size: 12px;
           letter-spacing: 0.16em;
           text-transform: uppercase;
-          border-bottom: 1px solid currentColor;
-          padding-bottom: 4px;
-          transition: color 0.2s ease;
+          min-height: 40px;
+          padding: 0 16px;
+          border: 1px solid var(--accent);
+          transition: background 0.2s ease, color 0.2s ease;
         }
 
-        .glasses-card__cta:hover {
-          color: var(--deep);
+        .glasses-card__cta--primary {
+          background: var(--accent);
+          color: var(--paper);
+        }
+
+        .glasses-card__cta--secondary {
+          color: var(--accent);
+          background: transparent;
+        }
+
+        .glasses-card__cta--primary:hover {
+          background: var(--deep);
+          border-color: var(--deep);
+        }
+
+        .glasses-card__cta--secondary:hover {
+          color: var(--paper);
+          background: var(--accent);
         }
 
         .accessories-page__closing {
@@ -424,47 +552,88 @@ export function Accessories() {
           }
 
           .glasses-list {
-            grid-template-columns: 1fr;
-            gap: 0;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
           }
 
           .glasses-card {
-            display: grid;
-            grid-template-columns: minmax(110px, 38%) 1fr;
-            gap: 18px;
-            padding: 20px 0;
-            border-top: 1px solid var(--line);
-          }
-
-          .glasses-card:last-child {
-            border-bottom: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
+            overflow: hidden;
+            background: var(--soft);
+            border: 1px solid var(--line);
+            box-shadow: 0 8px 24px rgba(44, 24, 16, 0.06);
           }
 
           .glasses-card__image-wrap {
             height: auto;
-            min-height: 160px;
+            min-height: 0;
+            aspect-ratio: 4 / 5;
             margin: 0;
           }
 
           .glasses-card__body {
             border-top: 0;
-            padding-top: 0;
+            padding: 14px;
           }
 
           .glasses-card__number {
-            font-size: 30px;
+            font-size: 26px;
             margin-bottom: 4px;
           }
 
           .glasses-card__name {
-            font-size: 22px;
+            font-size: 20px;
+            line-height: 1.1;
+            margin-bottom: 7px;
           }
 
           .glasses-card__detail {
+            font-size: 12px;
+            margin-bottom: 12px;
+          }
+
+          .glasses-card__price {
+            font-size: 18px;
             margin-bottom: 12px;
           }
 
           .glasses-card__dots {
+            bottom: 10px;
+          }
+
+          .glasses-card__image-controls {
+            display: none;
+          }
+
+          .glasses-card__cta {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            min-height: 36px;
+            padding: 0 11px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .glasses-slider {
+            padding: 0 16px;
+          }
+
+          .glasses-list {
+            gap: 10px;
+          }
+
+          .glasses-card__body {
+            padding: 11px;
+          }
+
+          .glasses-card__name {
+            font-size: 18px;
+          }
+
+          .glasses-card__detail {
             display: none;
           }
         }
@@ -477,7 +646,8 @@ export function Accessories() {
             transition: none;
           }
 
-          .glasses-card:hover .glasses-card__image--primary {
+          .glasses-card:hover .glasses-card__image,
+          .glasses-card__image-wrap.is-touching .glasses-card__image {
             transform: none;
           }
         }
