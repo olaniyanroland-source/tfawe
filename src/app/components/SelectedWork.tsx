@@ -3,6 +3,8 @@ import { Link } from "react-router";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import ceoImage from "../../assets/CEO.png";
+import suit11Image from "../../assets/suit11.jpg";
+import suit3Image from "../../assets/suit3.jpg";
 import tfaweWorkImage from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
@@ -14,11 +16,11 @@ function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
 
 const SELECTED_WORK = [
   {
-    title: "Ivory Ceremony",
-    type: "Hand-finished bridal",
-    detail: "Sculpted bodice, silk organza train, hidden corsetry.",
+    title: "The Wedding Party",
+    type: "Formal occasion suiting",
+    detail: "A coordinated black-tie party, finished with a crisp ivory dinner jacket for the groom.",
     measure: "01 / 05",
-    img: "https://images.unsplash.com/photo-1594552072238-b8a33785b261?w=900&h=1200&fit=crop&fm=jpg&q=80",
+    img: suit11Image,
     width: "clamp(18rem, 32vw, 30rem)",
     height: "clamp(24rem, 52vh, 32rem)",
     align: "self-end",
@@ -34,11 +36,11 @@ const SELECTED_WORK = [
     align: "self-start",
   },
   {
-    title: "Red Salon",
-    type: "Occasion garment",
-    detail: "Fluid drape, high-slit movement, hand-balanced hem.",
+    title: "Midnight Tailoring",
+    type: "Bespoke suiting",
+    detail: "A sharp navy two-piece with a sculpted silhouette, clean lines, and refined finishing.",
     measure: "03 / 05",
-    img: "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=900&h=1200&fit=crop&fm=jpg&q=80",
+    img: suit3Image,
     width: "clamp(17rem, 29vw, 27rem)",
     height: "clamp(22rem, 49vh, 30rem)",
     align: "self-center",

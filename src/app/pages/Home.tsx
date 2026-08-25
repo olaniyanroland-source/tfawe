@@ -2,7 +2,12 @@ import { useRef } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import heroVideo from "../../assets/heroVideo.mp4";
+import heroVideo from "../../assets/suitvideo.mp4";
+import suit2Image from "../../assets/suit2.jpg";
+import suit5Image from "../../assets/suit5.jpg";
+import suit6Image from "../../assets/suit6.jpg";
+import suit7Image from "../../assets/suit7.jpg";
+import suit8Image from "../../assets/suit8.jpg";
 import tfaweWorkImage from "../../assets/tfawework.png";
 import { SelectedWork } from "../components/SelectedWork";
 
@@ -25,15 +30,15 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 
 const EDITORIAL = [
   { src: tfaweWorkImage, alt: "TFawe tailoring work", h: "h-80 lg:h-[500px]" },
-  { src: "https://images.unsplash.com/photo-1664076458686-3449062080ac?w=600&h=800&fit=crop&fm=jpg&q=80", alt: "Woman in elegant dress", h: "h-56 lg:h-72 self-end" },
-  { src: "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?w=600&h=800&fit=crop&fm=jpg&q=80", alt: "Red gown editorial", h: "h-72 lg:h-[420px]" },
+  { src: suit6Image, alt: "Ivory tailored suit with a striped tie", h: "h-56 lg:h-72 self-end" },
+  { src: suit7Image, alt: "Curated collection of tailored jackets in the atelier", h: "h-72 lg:h-[420px]" },
 ];
 
 const QUICK_LINKS = [
   { label: "Our Story",    sub: "Est. 2014 · Toronto",              to: "/about",       img: "https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=600&h=400&fit=crop&fm=jpg&q=80" },
-  { label: "Pricing",      sub: "Garments from $200",               to: "/pricing",     img: "https://images.unsplash.com/photo-1603394151492-5e9b974b090b?w=600&h=400&fit=crop&fm=jpg&q=80" },
-  { label: "Book a Fit",   sub: "Reserve your consultation",        to: "/appointment", img: "https://images.unsplash.com/photo-1629511565591-a1d494ad6c58?w=600&h=400&fit=crop&fm=jpg&q=80" },
-  { label: "Contact",      sub: "Toronto, Canada",                  to: "/contact",     img: tfaweWorkImage },
+  { label: "Pricing",      sub: "Bespoke tailoring, clearly priced", to: "/pricing",     img: suit2Image },
+  { label: "Book a Fit",   sub: "Begin with a personal consultation", to: "/appointment", img: suit8Image },
+  { label: "Contact",      sub: "Visit our Toronto atelier",          to: "/contact",     img: suit5Image },
 ];
 
 function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
