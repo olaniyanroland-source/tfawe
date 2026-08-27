@@ -4,7 +4,7 @@ import { motion, useInView } from "motion/react";
 import { ArrowRight, Scissors, Star, Award, Users } from "lucide-react";
 import ceoImage from "../../assets/ceoTfawe.JPG";
 import { ElfsightWidget } from "../components/ElfsightWidget";
-import tailoringCraft from "../../assets/tfawework.png";
+import tfaweWorkshop from "../../assets/tfaweWorkshop2.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -54,7 +54,7 @@ export function About() {
         style={{ minHeight: 500, background: "#1A0E0B", paddingTop: 140 }}
       >
         <img
-          src={tailoringCraft}
+          src={tfaweWorkshop}
           alt="Fashion editorial background"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />
@@ -86,12 +86,15 @@ export function About() {
             <Reveal y={0}>
               <motion.div
                 className="w-full overflow-hidden"
-                style={{ aspectRatio: "3/4", background: "#D9CBBF" }}
               >
-                <img
-                  src={tailoringCraft}
-                  alt="Bespoke tailoring craft"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                <motion.img
+                  src={tfaweWorkshop}
+                  alt="TFAWE workshop"
+                  className="w-full h-auto block"
+                  initial={{ opacity: 0, scale: 1.04 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1.1, ease }}
+                  whileHover={{ scale: 1.04 }}
                 />
               </motion.div>
             </Reveal>

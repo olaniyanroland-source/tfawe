@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import ceoImage from "../../assets/CEO.png";
 import suit11Image from "../../assets/suit11.jpg";
+import suit10Image from "../../assets/suit10.jpg";
 import suit3Image from "../../assets/suit3.jpg";
 import tfaweWorkImage from "../../assets/tfawework.png";
 
@@ -50,7 +51,7 @@ const SELECTED_WORK = [
     type: "Tailored separates",
     detail: "Soft shoulder, relaxed trouser line, matte wool finish.",
     measure: "04 / 05",
-    img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=900&h=1200&fit=crop&fm=jpg&q=80",
+    img: suit10Image,
     width: "clamp(20rem, 37vw, 36rem)",
     height: "clamp(25rem, 55vh, 34rem)",
     align: "self-end",

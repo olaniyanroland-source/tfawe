@@ -31,14 +31,14 @@ const CONSTRUCTION_TABS: { key: ConstructionKey; label: string; description: str
 ];
 
 const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: string; handMade: string; category: string }[] = [
-  { name: "2-Piece Suit",  fused: "$650",  halfCanvas: "$800",   fullCanvas: "$1,200", handMade: "POA", category: "Suits" },
-  { name: "3-Piece Suit",  fused: "$800",  halfCanvas: "$1,000", fullCanvas: "$1,500", handMade: "POA", category: "Suits" },
-  { name: "Tuxedo Suit",   fused: "$800",  halfCanvas: "$1,000", fullCanvas: "$1,500", handMade: "POA", category: "Suits" },
-  { name: "Jacket",        fused: "$450",  halfCanvas: "$600",   fullCanvas: "$1,000", handMade: "POA", category: "Separates" },
-  { name: "Trousers",      fused: "$200",  halfCanvas: "$250",   fullCanvas: "$300",   handMade: "POA", category: "Separates" },
-  { name: "Waistcoat",     fused: "$200",  halfCanvas: "$250",   fullCanvas: "$350",   handMade: "POA", category: "Separates" },
-  { name: "Overcoat",      fused: "$600",  halfCanvas: "$700",   fullCanvas: "$1,000", handMade: "POA", category: "Outerwear" },
-  { name: "Regular Shirt", fused: "$200",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",   category: "Shirts" },
+  { name: "2-Piece Suit",  fused: "$699",  halfCanvas: "$1500",   fullCanvas: "$2,500", handMade: "$3,500", category: "Suits" },
+  { name: "3-Piece Suit",  fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", handMade: "$3,800", category: "Suits" },
+  { name: "Tuxedo Suit",   fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", handMade: "$3,800", category: "Suits" },
+  { name: "Jacket",        fused: "$449",  halfCanvas: "$1,000",   fullCanvas: "$1,600", handMade: "$2,200", category: "Separates" },
+  { name: "Trousers",      fused: "$240",  halfCanvas: "$500",   fullCanvas: "$750",   handMade: "$1,000", category: "Separates" },
+  { name: "Waistcoat",     fused: "$250",  halfCanvas: "$400",   fullCanvas: "$600",   handMade: "$800", category: "Separates" },
+  { name: "Overcoat",      fused: "$699",  halfCanvas: "$1,500",   fullCanvas: "$2,200", handMade: "$3,000", category: "Outerwear" },
+  { name: "Regular Shirt", fused: "$220",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",   category: "Shirts" },
   { name: "Tuxedo Shirt",  fused: "$250",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",   category: "Shirts" },
 ];
 
@@ -54,10 +54,10 @@ export function Pricing() {
   const [activeTab, setActiveTab] = useState<ConstructionKey>("fused");
   const [currency, setCurrency] = useState<'CAD'|'USD'|'GBP'|'EUR'>('CAD');
   const RATES: Record<string, number> = {
-    CAD: 1,     // base
-    USD: 0.74,  // 1 CAD -> 0.74 USD (approx)
-    GBP: 0.59,  // 1 CAD -> 0.59 GBP (approx)
-    EUR: 0.68,  // 1 CAD -> 0.68 EUR (approx)
+    CAD: 1,
+    USD: 0.7226, // 1 CAD = 0.7226 USD
+    GBP: 0.5300, // 1 CAD = 0.5300 GBP
+    EUR: 0.6200, // 1 CAD = 0.6200 EUR
   };
 
   function formatPrice(raw: string) {
@@ -239,7 +239,7 @@ export function Pricing() {
               style={{ background: "rgba(121,65,55,.12)", border: "1px solid rgba(121,65,55,.2)" }}
             >
               <p className="text-xs leading-relaxed flex-1" style={{ color: "rgba(179,144,133,.55)" }}>
-                All prices are starting prices. Final cost depends on fabric selection and complexity. "Contact for pricing" requires bespoke quotation.
+                All prices are starting prices. USD, GBP, and EUR amounts are converted from the CAD price and rounded to the nearest whole unit; final cost depends on fabric selection and complexity.
               </p>
               <Link
                 to="/appointment"
