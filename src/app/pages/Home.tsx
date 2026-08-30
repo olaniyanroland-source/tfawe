@@ -68,7 +68,7 @@ export function Home() {
         <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(12,7,5,.52) 0%,rgba(12,7,5,.34) 48%,rgba(12,7,5,0) 100%)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-44" style={{ background: "linear-gradient(to top,#ECE1D8,transparent)" }} />
 
-        <div className="absolute inset-x-0 bottom-32 z-10 mx-auto max-w-7xl px-8 lg:px-20">
+        <div className="absolute inset-x-0 bottom-28 z-10 mx-auto max-w-7xl px-8 lg:px-20">
           <motion.p
             initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease }}
@@ -88,15 +88,6 @@ export function Home() {
             <em style={{ fontStyle: "italic", color: "#F2CDBB" }}>you alone.</em>
           </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.75, ease }}
-            className="max-w-sm text-sm leading-relaxed"
-            style={{ color: "rgba(255,246,239,.94)", fontWeight: 500, textShadow: heroTextShadow }}
-          >
-            Toronto's finest atelier for bespoke suiting, personal styling, and garments built to outlast every trend.
-          </motion.p>
-
         </div>
 
         <motion.div
@@ -105,10 +96,10 @@ export function Home() {
         >
           <Link
             to="/appointment"
-            className="inline-flex items-center gap-2 pb-1 text-xs tracking-[0.2em] uppercase transition-colors duration-200"
-            style={{ color: "#ECE1D8", borderBottom: "1px solid rgba(236,225,216,.65)", textShadow: heroTextShadow }}
-            onMouseEnter={e => (e.currentTarget.style.color = "#F2CDBB")}
-            onMouseLeave={e => (e.currentTarget.style.color = "#ECE1D8")}
+            className="inline-flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-colors duration-300"
+            style={{ background: "#794137", color: "#ECE1D8" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
+            onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
           >
             Book a Consultation <ArrowRight size={13} />
           </Link>
