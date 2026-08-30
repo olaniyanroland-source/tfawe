@@ -5,6 +5,7 @@ import { ArrowRight, MapPin, Phone, Mail, Clock, CheckCircle, Instagram } from "
 import tfaweWorkImage from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mppzqwyn";
 
 function Reveal({ children, delay = 0, y = 32, className = "" }: {
   children: React.ReactNode; delay?: number; y?: number; className?: string;
@@ -50,12 +51,31 @@ const SOCIALS = [
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSent(true);
-    setForm({ name: "", email: "", subject: "", message: "" });
-    setTimeout(() => setSent(false), 6000);
+    setSubmitting(true);
+    setSubmitError(false);
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(e.currentTarget),
+      });
+
+      if (!response.ok) throw new Error("Unable to submit form");
+
+      setSent(true);
+      setForm({ name: "", email: "", subject: "", message: "" });
+      setTimeout(() => setSent(false), 6000);
+    } catch {
+      setSubmitError(true);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const field = "w-full box-border px-4 py-3.5 text-sm outline-none";
@@ -168,6 +188,7 @@ export function Contact() {
             </Reveal>
 
             <form onSubmit={handleSubmit} className="space-y-5 p-8 lg:p-10" style={{ background: "#F5EDE7" }}>
+              <input type="hidden" name="form_type" value="Contact message" />
               <AnimatePresence>
                 {sent && (
                   <motion.div
@@ -187,12 +208,12 @@ export function Contact() {
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block mb-2 text-xs tracking-[0.18em] uppercase" style={{ color: "#794137" }}>Your Name</label>
-                    <input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
+                    <input required name="name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
                       placeholder="Amelia Richardson" className={field} style={fieldStyle} />
                   </div>
                   <div>
                     <label className="block mb-2 text-xs tracking-[0.18em] uppercase" style={{ color: "#794137" }}>Email</label>
-                    <input required type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
+                    <input required name="email" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })}
                       placeholder="amelia@email.com" className={field} style={fieldStyle} />
                   </div>
                 </div>
@@ -201,7 +222,7 @@ export function Contact() {
               <Reveal delay={0.1}>
                 <div>
                   <label className="block mb-2 text-xs tracking-[0.18em] uppercase" style={{ color: "#794137" }}>Subject</label>
-                  <input value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })}
+                  <input name="subject" value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })}
                     placeholder="How can we help you?" className={field} style={fieldStyle} />
                 </div>
               </Reveal>
@@ -209,7 +230,7 @@ export function Contact() {
               <Reveal delay={0.15}>
                 <div>
                   <label className="block mb-2 text-xs tracking-[0.18em] uppercase" style={{ color: "#794137" }}>Message</label>
-                  <textarea required rows={6} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
+                  <textarea required name="message" rows={6} value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
                     placeholder="Tell us about yourself and what you're looking for…"
                     className={`${field} resize-none`} style={fieldStyle} />
                 </div>
@@ -218,15 +239,21 @@ export function Contact() {
               <Reveal delay={0.2}>
                 <motion.button
                   type="submit"
+                  disabled={submitting}
                   whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.985 }}
-                  className="w-full py-4 text-xs tracking-[0.22em] uppercase flex items-center justify-center gap-2 transition-colors duration-300"
+                  className="w-full py-4 text-xs tracking-[0.22em] uppercase flex items-center justify-center gap-2 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-70"
                   style={{ background: "#794137", color: "#ECE1D8" }}
                   onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
                   onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
                 >
-                  Send Message <ArrowRight size={13} />
+                  {submitting ? "Sending…" : "Send Message"} <ArrowRight size={13} />
                 </motion.button>
               </Reveal>
+              {submitError && (
+                <p className="text-sm" style={{ color: "#9B2C2C" }}>
+                  Something went wrong. Please try again or email us directly.
+                </p>
+              )}
             </form>
 
             <Reveal delay={0.1}>

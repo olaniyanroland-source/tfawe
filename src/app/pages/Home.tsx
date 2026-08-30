@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
-import { ArrowRight, ChevronDown } from "lucide-react";
-import heroVideo from "../../assets/tfawecomvideo.mp4";
+import { ArrowRight } from "lucide-react";
+import heroVideo from "../../assets/Tfawebvideo.mp4";
+import secondHeroVideo from "../../assets/Tfawesecvid.mp4";
 import suit2Image from "../../assets/suit2.jpg";
 import suit5Image from "../../assets/suit5.jpg";
 import suit6Image from "../../assets/suit6.jpg";
@@ -47,22 +48,27 @@ function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
 }
 
 export function Home() {
+  const [activeVideo, setActiveVideo] = useState(0);
+  const heroVideos = [heroVideo, secondHeroVideo];
+
   return (
     <div>
       {/* ── HERO ── */}
       <section className="relative w-full overflow-hidden" style={{ height: "100svh", minHeight: 620 }}>
         <video
+          key={activeVideo}
           className="absolute inset-0 w-full h-full object-cover"
-          autoPlay muted loop playsInline
+          autoPlay muted playsInline
+          onEnded={() => setActiveVideo(current => (current + 1) % heroVideos.length)}
           poster="https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=1920&h=1080&fit=crop&fm=jpg&q=80"
         >
-          <source src={heroVideo} type="video/mp4" />
+          <source src={heroVideos[activeVideo]} type="video/mp4" />
         </video>
         <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(12,7,5,.78) 0%,rgba(26,14,11,.56) 36%,rgba(121,65,55,.2) 62%,rgba(26,14,11,.52) 100%)" }} />
         <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(12,7,5,.52) 0%,rgba(12,7,5,.34) 48%,rgba(12,7,5,0) 100%)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-44" style={{ background: "linear-gradient(to top,#ECE1D8,transparent)" }} />
 
-        <div className="relative z-10 h-full flex flex-col justify-center px-8 lg:px-20 max-w-7xl mx-auto">
+        <div className="absolute inset-x-0 bottom-32 z-10 mx-auto max-w-7xl px-8 lg:px-20">
           <motion.p
             initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease }}
@@ -76,7 +82,7 @@ export function Home() {
             initial={{ opacity: 0, y: 44 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease }}
             className="mb-6 leading-none"
-            style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(3.2rem,9vw,8.5rem)", fontWeight: 500, color: "#FFF6EF", maxWidth: "11ch", textShadow: heroTextShadow }}
+            style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.7rem,6.8vw,6.5rem)", fontWeight: 500, color: "#FFF6EF", maxWidth: "11ch", textShadow: heroTextShadow }}
           >
             Crafted for<br />
             <em style={{ fontStyle: "italic", color: "#F2CDBB" }}>you alone.</em>
@@ -85,45 +91,46 @@ export function Home() {
           <motion.p
             initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.75, ease }}
-            className="mb-10 max-w-sm text-sm leading-relaxed"
+            className="max-w-sm text-sm leading-relaxed"
             style={{ color: "rgba(255,246,239,.94)", fontWeight: 500, textShadow: heroTextShadow }}
           >
             Toronto's finest atelier for bespoke suiting, personal styling, and garments built to outlast every trend.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1, ease }}
-            className="flex flex-wrap gap-4"
-          >
-            <Link
-              to="/appointment"
-              className="flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-all duration-300"
-              style={{ background: "#794137", color: "#ECE1D8" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
-              onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
-            >
-              Book a Consultation <ArrowRight size={13} />
-            </Link>
-            <Link
-              to="/about"
-              className="flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-all duration-300"
-              style={{ background: "transparent", color: "#ECE1D8", border: "1px solid rgba(236,225,216,.35)" }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = "#ECE1D8")}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(236,225,216,.35)")}
-            >
-              Our Story
-            </Link>
-          </motion.div>
         </div>
 
         <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.6, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
-          style={{ color: "rgba(255,246,239,.68)", textShadow: heroTextShadow }}
+          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3, duration: 0.7 }}
+          className="absolute bottom-10 left-8 lg:left-20 z-10 flex flex-col items-start gap-4"
         >
-          <span className="text-xs tracking-[0.2em] uppercase">Scroll</span>
-          <ChevronDown size={14} className="animate-bounce" />
+          <Link
+            to="/appointment"
+            className="inline-flex items-center gap-2 pb-1 text-xs tracking-[0.2em] uppercase transition-colors duration-200"
+            style={{ color: "#ECE1D8", borderBottom: "1px solid rgba(236,225,216,.65)", textShadow: heroTextShadow }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#F2CDBB")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#ECE1D8")}
+          >
+            Book a Consultation <ArrowRight size={13} />
+          </Link>
+          <div
+            className="flex items-center gap-2"
+            aria-label={`Hero video ${activeVideo + 1} of ${heroVideos.length}`}
+          >
+            {heroVideos.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                aria-label={`Show hero video ${index + 1}`}
+                aria-current={activeVideo === index}
+                onClick={() => setActiveVideo(index)}
+                className="h-1.5 rounded-full transition-all duration-300"
+                style={{
+                  width: activeVideo === index ? 24 : 6,
+                  background: activeVideo === index ? "#ECE1D8" : "rgba(236,225,216,.45)",
+                }}
+              />
+            ))}
+          </div>
         </motion.div>
       </section>
 

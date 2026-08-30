@@ -17,6 +17,7 @@ const NAV = [
 const SOCIALS = [
   { label: "Instagram", href: "https://www.instagram.com/tfawe_/", Icon: InstagramIcon },
 ];
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mppzqwyn";
 
 const LEGAL_LINKS = [
   { label: "Privacy Policy", to: "/privacy-policy" },
@@ -29,6 +30,8 @@ export function Layout() {
   const [scrolled, setScrolled] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterJoined, setNewsletterJoined] = useState(false);
+  const [newsletterError, setNewsletterError] = useState(false);
+  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
 
@@ -49,11 +52,28 @@ export function Layout() {
     ? "rgba(26,14,11,0.97)"
     : "transparent";
 
-  function handleNewsletterSubmit(e: React.FormEvent) {
+  async function handleNewsletterSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setNewsletterJoined(true);
-    setNewsletterEmail("");
-    setTimeout(() => setNewsletterJoined(false), 5000);
+    setNewsletterSubmitting(true);
+    setNewsletterError(false);
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(e.currentTarget),
+      });
+
+      if (!response.ok) throw new Error("Unable to subscribe");
+
+      setNewsletterJoined(true);
+      setNewsletterEmail("");
+      setTimeout(() => setNewsletterJoined(false), 5000);
+    } catch {
+      setNewsletterError(true);
+    } finally {
+      setNewsletterSubmitting(false);
+    }
   }
 
   return (
@@ -169,6 +189,7 @@ export function Layout() {
             </div>
 
             <form onSubmit={handleNewsletterSubmit} className="w-full">
+              <input type="hidden" name="form_type" value="Newsletter subscription" />
               <label
                 htmlFor="newsletter-email"
                 className="block mb-3 text-xs tracking-[0.22em] uppercase"
@@ -182,6 +203,7 @@ export function Layout() {
               >
                 <input
                   id="newsletter-email"
+                  name="email"
                   type="email"
                   required
                   value={newsletterEmail}
@@ -192,17 +214,23 @@ export function Layout() {
                 />
                 <button
                   type="submit"
-                  className="min-h-12 px-5 text-xs tracking-[0.18em] uppercase transition-colors duration-200"
+                  disabled={newsletterSubmitting}
+                  className="min-h-12 px-5 text-xs tracking-[0.18em] uppercase transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-70"
                   style={{ background: "#794137", color: "#ECE1D8" }}
                   onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
                   onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
                 >
-                  Subscribe
+                  {newsletterSubmitting ? "Subscribing…" : "Subscribe"}
                 </button>
               </div>
               {newsletterJoined && (
                 <p className="mt-3 text-xs" style={{ color: "rgba(236,225,216,0.65)" }}>
                   Thank you for subscribing.
+                </p>
+              )}
+              {newsletterError && (
+                <p className="mt-3 text-xs" style={{ color: "#E9AAA0" }}>
+                  We could not subscribe you. Please try again.
                 </p>
               )}
             </form>

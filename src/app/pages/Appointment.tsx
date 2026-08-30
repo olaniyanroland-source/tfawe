@@ -197,6 +197,20 @@ export function Appointment() {
                 </div>
               </div>
             </Reveal>
+
+            <Reveal delay={0.3}>
+              <div className="flex items-start gap-4 p-6" style={{ background: "rgba(121,65,55,.08)", borderLeft: "3px solid #794137" }}>
+                <Clock size={18} className="mt-0.5 shrink-0" style={{ color: "#794137" }} />
+                <div>
+                  <p className="mb-1 text-xs font-semibold tracking-[0.16em] uppercase" style={{ color: "#794137" }}>
+                    Turnaround Time
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
+                    The average turnaround time for all garments is 3–4 weeks from confirmation of your order and measurements.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
