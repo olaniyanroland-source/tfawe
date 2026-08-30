@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView, AnimatePresence } from "motion/react";
 import { ArrowRight, Check } from "lucide-react";
-import jacketImage from "../../assets/tfawework.png";
+import jacketImage from "../../assets/Tfawesuit.JPG";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 const darkSectionTextShadow = "0 1px 8px rgba(26,14,11,.65)";

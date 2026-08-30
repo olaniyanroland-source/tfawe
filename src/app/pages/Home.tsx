@@ -9,7 +9,7 @@ import suit5Image from "../../assets/suit5.jpg";
 import suit6Image from "../../assets/suit6.jpg";
 import suit7Image from "../../assets/suit7.jpg";
 import suit8Image from "../../assets/suit8.jpg";
-import tfaweWorkImage from "../../assets/tfawework.png";
+import tfaweWorkImage from "../../assets/Tfawesuit.JPG";
 import { SelectedWork } from "../components/SelectedWork";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;

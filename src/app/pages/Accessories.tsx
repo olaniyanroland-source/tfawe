@@ -7,7 +7,7 @@ import glass3 from "../../assets/glass3-optimized.jpg";
 import glass4 from "../../assets/glass4-optimized.jpg";
 import glass5 from "../../assets/glass5-optimized.jpg";
 import glass6 from "../../assets/glass6-optimized.jpg";
-import tfaweWorkImage from "../../assets/tfawework.png";
+import tfaweWorkImage from "../../assets/Tfawesuit.JPG";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 

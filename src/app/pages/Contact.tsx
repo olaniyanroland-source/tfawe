@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView, AnimatePresence } from "motion/react";
 import { ArrowRight, MapPin, Phone, Mail, Clock, CheckCircle, Instagram } from "lucide-react";
-import tfaweWorkImage from "../../assets/tfawework.png";
+import tfaweWorkImage from "../../assets/Tfawesuit.JPG";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mppzqwyn";
