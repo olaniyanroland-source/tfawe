@@ -4,12 +4,12 @@ import { motion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import heroVideo from "../../assets/Tfawebvideo.mp4";
 import secondHeroVideo from "../../assets/Tfawesecvid.mp4";
-import suit2Image from "../../assets/suit2.jpg";
-import suit5Image from "../../assets/suit5.jpg";
-import suit6Image from "../../assets/suit6.jpg";
-import suit7Image from "../../assets/suit7.jpg";
-import suit8Image from "../../assets/suit8.jpg";
-import tfaweWorkImage from "../../assets/Tfawesuit.JPG";
+import suit2Image from "../../assets/suit2.webp";
+import suit5Image from "../../assets/suit5.webp";
+import suit6Image from "../../assets/suit6.webp";
+import suit7Image from "../../assets/suit7.webp";
+import suit8Image from "../../assets/suit8.webp";
+import tfaweWorkImage from "../../assets/Tfawesuit.webp";
 import { SelectedWork } from "../components/SelectedWork";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
@@ -58,14 +58,15 @@ export function Home() {
         <video
           key={activeVideo}
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: "brightness(1.3)" }}
           autoPlay muted playsInline
           onEnded={() => setActiveVideo(current => (current + 1) % heroVideos.length)}
           poster="https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=1920&h=1080&fit=crop&fm=jpg&q=80"
         >
           <source src={heroVideos[activeVideo]} type="video/mp4" />
         </video>
-        <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(12,7,5,.78) 0%,rgba(26,14,11,.56) 36%,rgba(121,65,55,.2) 62%,rgba(26,14,11,.52) 100%)" }} />
-        <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(12,7,5,.52) 0%,rgba(12,7,5,.34) 48%,rgba(12,7,5,0) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(12,7,5,.46) 0%,rgba(26,14,11,.28) 36%,rgba(121,65,55,.08) 62%,rgba(26,14,11,.24) 100%)" }} />
+        <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(12,7,5,.26) 0%,rgba(12,7,5,.14) 48%,rgba(12,7,5,0) 100%)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-44" style={{ background: "linear-gradient(to top,#ECE1D8,transparent)" }} />
 
         <div className="absolute inset-x-0 bottom-28 z-10 mx-auto max-w-7xl px-8 lg:px-20">
@@ -88,6 +89,21 @@ export function Home() {
             <em style={{ fontStyle: "italic", color: "#F2CDBB" }}>you alone.</em>
           </motion.h1>
 
+          <motion.div
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.3, duration: 0.7 }}
+            className="hidden lg:block"
+          >
+            <Link
+              to="/appointment"
+              className="inline-flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-colors duration-300"
+              style={{ background: "#794137", color: "#ECE1D8" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
+              onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
+            >
+              Book a Consultation <ArrowRight size={13} />
+            </Link>
+          </motion.div>
         </div>
 
         <motion.div
@@ -96,7 +112,7 @@ export function Home() {
         >
           <Link
             to="/appointment"
-            className="inline-flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-colors duration-300"
+            className="inline-flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-colors duration-300 lg:hidden"
             style={{ background: "#794137", color: "#ECE1D8" }}
             onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
             onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
@@ -137,7 +153,7 @@ export function Home() {
             {QUICK_LINKS.map(({ label, sub, to, img }, i) => (
               <Reveal key={to} delay={i * 0.08}>
                 <Link to={to} className="block group relative overflow-hidden" style={{ background: "#D9CBBF", aspectRatio: "3/4" }}>
-                  <img src={img} alt={label} onError={handleImageError} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" />
+                  <img src={img} alt={label} loading="lazy" decoding="async" onError={handleImageError} className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" />
                   <div className="absolute inset-0" style={{ background: "linear-gradient(to top,rgba(26,14,11,.85) 0%,transparent 55%)" }} />
                   <div className="absolute bottom-0 left-0 p-6">
                     <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.35rem", color: "#ECE1D8", fontWeight: 400, lineHeight: 1.2 }}>{label}</p>
@@ -181,7 +197,7 @@ export function Home() {
                 className="w-full h-full overflow-hidden"
                 style={{ background: "#3D2218" }}
               >
-                <img src={src} alt={alt} onError={handleImageError} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500" />
+                <img src={src} alt={alt} loading="lazy" decoding="async" onError={handleImageError} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500" />
               </motion.div>
             </Reveal>
           ))}
