@@ -65,7 +65,7 @@ export function Home() {
         >
           <source src={heroVideos[activeVideo]} type="video/mp4" />
         </video>
-        <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(12,7,5,.46) 0%,rgba(26,14,11,.28) 36%,rgba(121,65,55,.08) 62%,rgba(26,14,11,.24) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(12,7,5,.26) 0%,rgba(26,14,11,.28) 36%,rgba(121,65,55,.08) 62%,rgba(26,14,11,.24) 100%)" }} />
         <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(12,7,5,.26) 0%,rgba(12,7,5,.14) 48%,rgba(12,7,5,0) 100%)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-44" style={{ background: "linear-gradient(to top,#ECE1D8,transparent)" }} />
 
