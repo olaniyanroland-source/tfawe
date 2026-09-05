@@ -65,15 +65,15 @@ export function Home() {
         >
           <source src={heroVideos[activeVideo]} type="video/mp4" />
         </video>
-        <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(12,7,5,.26) 0%,rgba(26,14,11,.28) 36%,rgba(121,65,55,.08) 62%,rgba(26,14,11,.24) 100%)" }} />
-        <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(12,7,5,.26) 0%,rgba(12,7,5,.14) 48%,rgba(12,7,5,0) 100%)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(47,29,21,.12) 0%,rgba(121,65,55,.12) 38%,rgba(214,166,137,.10) 64%,rgba(47,29,21,.10) 100%)" }} />
+        <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(26,14,11,.16) 0%,rgba(26,14,11,.06) 48%,rgba(26,14,11,0) 100%)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-44" style={{ background: "linear-gradient(to top,#ECE1D8,transparent)" }} />
 
-        <div className="absolute inset-x-0 bottom-28 z-10 mx-auto max-w-7xl px-8 lg:px-20">
+        <div className="absolute inset-x-0 bottom-24 lg:bottom-16 z-10 mx-auto max-w-7xl px-8 lg:px-20">
           <motion.p
             initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease }}
-            className="mb-5 text-xs tracking-[0.4em] uppercase"
+            className="mb-3 text-[0.65rem] tracking-[0.32em] uppercase"
             style={{ color: "#F2D7CB", fontWeight: 700, textShadow: heroTextShadow }}
           >
             Custom-Made Tailoring &amp; Personal Styling · Toronto, Canada.
@@ -82,8 +82,8 @@ export function Home() {
           <motion.h1
             initial={{ opacity: 0, y: 44 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease }}
-            className="mb-6 leading-none"
-            style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.7rem,6.8vw,6.5rem)", fontWeight: 500, color: "#FFF6EF", maxWidth: "11ch", textShadow: heroTextShadow }}
+            className="mb-1 leading-none"
+            style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.25rem,5.2vw,5rem)", fontWeight: 500, color: "#FFF6EF", maxWidth: "11ch", textShadow: heroTextShadow }}
           >
             Crafted for<br />
             <em style={{ fontStyle: "italic", color: "#F2CDBB" }}>you alone.</em>
@@ -96,7 +96,7 @@ export function Home() {
           >
             <Link
               to="/appointment"
-              className="inline-flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-colors duration-300"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-[0.65rem] tracking-[0.16em] uppercase transition-colors duration-300"
               style={{ background: "#794137", color: "#ECE1D8" }}
               onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
               onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
@@ -108,11 +108,11 @@ export function Home() {
 
         <motion.div
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3, duration: 0.7 }}
-          className="absolute bottom-10 left-8 lg:left-20 z-10 flex flex-col items-start gap-4"
+          className="absolute bottom-6 left-8 lg:left-20 z-10 flex flex-col items-start gap-3"
         >
           <Link
             to="/appointment"
-            className="inline-flex items-center gap-3 px-8 py-4 text-xs tracking-[0.2em] uppercase transition-colors duration-300 lg:hidden"
+            className="inline-flex items-center gap-2 px-5 py-2.5 text-[0.65rem] tracking-[0.16em] uppercase transition-colors duration-300 lg:hidden"
             style={{ background: "#794137", color: "#ECE1D8" }}
             onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
             onMouseLeave={e => (e.currentTarget.style.background = "#794137")}

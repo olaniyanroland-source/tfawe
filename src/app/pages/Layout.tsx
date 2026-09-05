@@ -120,7 +120,7 @@ export function Layout() {
             onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
             onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
           >
-            Book Now
+            Book a Consultation 
           </Link>
 
           <button

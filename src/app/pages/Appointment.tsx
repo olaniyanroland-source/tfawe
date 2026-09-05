@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight, MapPin, Clock, Calendar, Ruler, CreditCard } from "lucide-react";
+import BookingForm from "../components/BookingForm";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -26,45 +27,7 @@ const STEPS = [
   { num: "04", title: "Your garment",     body: "We begin crafting. Three fittings follow before the final reveal." },
 ];
 
-const CALENDLY_URL = "https://calendly.com/olaniyanroland/30min?background_color=ece1d8&text_color=794137&primary_color=b39085";
-
 export function Appointment() {
-  const calendlyRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const scriptId = "calendly-widget-script";
-    const initializeCalendly = () => {
-      window.requestAnimationFrame(() => {
-        const parentElement = calendlyRef.current;
-        const calendly = (window as Window & {
-          Calendly?: {
-            initInlineWidget: (options: { url: string; parentElement: HTMLElement }) => void;
-          };
-        }).Calendly;
-
-        if (parentElement && !parentElement.querySelector("iframe") && calendly) {
-          calendly.initInlineWidget({ url: CALENDLY_URL, parentElement });
-        }
-      });
-    };
-
-    const existingScript = document.getElementById(scriptId) as HTMLScriptElement | null;
-    if (existingScript) {
-      existingScript.addEventListener("load", initializeCalendly);
-      initializeCalendly();
-      return () => existingScript.removeEventListener("load", initializeCalendly);
-    }
-
-    const script = document.createElement("script");
-    script.id = scriptId;
-    script.src = "https://assets.calendly.com/assets/external/widget.js";
-    script.async = true;
-    script.addEventListener("load", initializeCalendly);
-    document.body.appendChild(script);
-
-    return () => script.removeEventListener("load", initializeCalendly);
-  }, []);
-
   return (
     <div style={{ background: "#ECE1D8" }}>
       {/* ── PAGE HERO ── */}
@@ -258,7 +221,7 @@ export function Appointment() {
             <Reveal delay={0.15}><div className="w-10 h-px mb-6" style={{ background: "#B39085" }} /></Reveal>
             <Reveal delay={0.2}>
               <p className="mb-8 text-sm leading-loose" style={{ color: "#5A3A30" }}>
-                Choose a time that suits you, then complete your booking directly through our scheduling calendar. Each session is entirely unhurried and tailored to you.
+                Choose a time that suits you, then complete your booking directly below. Each session is entirely unhurried and tailored to you.
               </p>
             </Reveal>
             <Reveal y={0}>
@@ -281,12 +244,7 @@ export function Appointment() {
 
           <Reveal delay={0.1}>
             <div className="overflow-hidden" style={{ background: "#F5EDE7" }}>
-              <div
-                ref={calendlyRef}
-                className="calendly-inline-widget"
-                data-url={CALENDLY_URL}
-                style={{ minWidth: 320 }}
-              />
+              <BookingForm />
             </div>
           </Reveal>
         </div>

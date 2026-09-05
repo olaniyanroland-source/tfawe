@@ -21,25 +21,24 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
   );
 }
 
-type ConstructionKey = "fused" | "halfCanvas" | "fullCanvas" | "handMade";
+type ConstructionKey = "fused" | "fullCanvas" | "handMade";
 
 const CONSTRUCTION_TABS: { key: ConstructionKey; label: string; description: string; level: string }[] = [
   { key: "fused",      label: "Fused",       level: "Entry",    description: "Structured construction using fusible interlining. Entry level  clean finish, great for everyday suiting." },
-  { key: "halfCanvas", label: "Half Canvas", level: "Better",   description: "Canvas through the chest and lapel area. Better structure, superior drape and longevity over fused." },
-  { key: "fullCanvas", label: "Full Canvas", level: "Premium",  description: "Canvas runs through the entire front of the jacket. The gold standard of construction for discerning clients." },
-  { key: "handMade",   label: "Hand Made",   level: "Finest",   description: "Extensive handwork and traditional tailoring techniques throughout. Our highest level of craft." },
+  { key: "fullCanvas", label: "Full Canvas", level: "Better",   description: "Canvas through the chest and lapel area. Better structure, superior drape and longevity over fused." },
+  { key: "handMade", label: "Hand Made", level: "Premium",  description: "Canvas runs through the entire front of the jacket. The gold standard of construction for discerning clients." },
 ];
 
-const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: string; handMade: string; category: string }[] = [
-  { name: "2-Piece Suit",  fused: "$699",  halfCanvas: "$1500",   fullCanvas: "$2,500", handMade: "$3,500", category: "Suits" },
-  { name: "3-Piece Suit",  fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", handMade: "$3,800", category: "Suits" },
-  { name: "Tuxedo Suit",   fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", handMade: "$3,800", category: "Suits" },
-  { name: "Jacket",        fused: "$449",  halfCanvas: "$1,000",   fullCanvas: "$1,600", handMade: "$2,200", category: "Separates" },
-  { name: "Trousers",      fused: "$240",  halfCanvas: "$500",   fullCanvas: "$750",   handMade: "$1,000", category: "Separates" },
-  { name: "Waistcoat",     fused: "$250",  halfCanvas: "$400",   fullCanvas: "$600",   handMade: "$800", category: "Separates" },
-  { name: "Overcoat",      fused: "$699",  halfCanvas: "$1,500",   fullCanvas: "$2,200", handMade: "$3,000", category: "Outerwear" },
-  { name: "Regular Shirt", fused: "$220",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",   category: "Shirts" },
-  { name: "Tuxedo Shirt",  fused: "$250",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",   category: "Shirts" },
+const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: string; category: string }[] = [
+  { name: "2-Piece Suit",  fused: "$699",  halfCanvas: "$1500",   fullCanvas: "$2,500", category: "Suits" },
+  { name: "3-Piece Suit",  fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", category: "Suits" },
+  { name: "Tuxedo Suit",   fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", category: "Suits" },
+  { name: "Jacket",        fused: "$449",  halfCanvas: "$1,000", fullCanvas: "$1,600", category: "Separates" },
+  { name: "Trousers",      fused: "$240",  halfCanvas: "$500",   fullCanvas: "$750",   category: "Separates" },
+  { name: "Waistcoat",     fused: "$250",  halfCanvas: "$400",   fullCanvas: "$600",   category: "Separates" },
+  { name: "Overcoat",      fused: "$699",  halfCanvas: "$1,500", fullCanvas: "$2,200", category: "Outerwear" },
+  { name: "Regular Shirt", fused: "$220",  halfCanvas: "—",      fullCanvas: "—",      category: "Shirts" },
+  { name: "Tuxedo Shirt",  fused: "$250",  halfCanvas: "—",      fullCanvas: "—",      category: "Shirts" },
 ];
 
   const INCLUDES = [
