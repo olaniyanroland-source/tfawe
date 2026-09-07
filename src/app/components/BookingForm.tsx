@@ -1,4 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqR7HoF255CLC8JGYuZ5jZ2NZ6nlbtUlguXqZ5p6Yjhf0e6hPbuipVz1_-EyZ8n5Ml/exec';
 const SLOT_DURATION_MINUTES = 90;
@@ -6,10 +8,43 @@ const SLOT_DURATION_MINUTES = 90;
 type Slot = { start: Date; end: Date };
 type BusySlot = { start: string; end: string };
 
+
+const STUDIO_TIMEZONE = "America/Toronto";
+
+// Returns the UTC offset (e.g. "-04:00") that `timeZone` observes on the given date.
+// Computed per-date so it's correct across the DST boundary (EST vs EDT).
+function getUtcOffset(date: Date, timeZone: string): string {
+  const dtf = new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "shortOffset" });
+  const tzPart = dtf.formatToParts(date).find(p => p.type === "timeZoneName")?.value || "GMT+0";
+  const match = tzPart.match(/GMT([+-]\d+)(?::(\d+))?/);
+  if (!match) return "+00:00";
+  const hours = parseInt(match[1], 10);
+  const minutes = match[2] ? parseInt(match[2], 10) : 0;
+  const sign = hours < 0 ? "-" : "+";
+  return `${sign}${String(Math.abs(hours)).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+}
+
+// Builds an absolute Date representing `HH:mm:ss` wall-clock time in Toronto on `dateStr`,
+// regardless of the visitor's own browser timezone.
+function torontoDateTime(dateStr: string, timeStr: string): Date {
+  const noonUtc = new Date(`${dateStr}T12:00:00Z`); // just to resolve DST status for this date
+  const offset = getUtcOffset(noonUtc, STUDIO_TIMEZONE);
+  return new Date(`${dateStr}T${timeStr}${offset}`);
+}
+
+// "Today" as Toronto sees it, not the visitor's local calendar date.
+function torontoTodayISODate(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: STUDIO_TIMEZONE }).format(new Date());
+}
+
+function isSunday(dateStr: string) {
+  return torontoDateTime(dateStr, "12:00:00").getDay() === 0;
+}
+
 function generateDaySlots(dateStr: string): Slot[] {
   const slots: Slot[] = [];
-  const firstSlot = new Date(`${dateStr}T11:00:00`);
-  const finalStart = new Date(`${dateStr}T17:00:00`);
+  const firstSlot = torontoDateTime(dateStr, "11:00:00");
+  const finalStart = torontoDateTime(dateStr, "17:00:00");
 
   for (let start = firstSlot; start <= finalStart; start = new Date(start.getTime() + SLOT_DURATION_MINUTES * 60000)) {
     const end = new Date(start.getTime() + SLOT_DURATION_MINUTES * 60000);
@@ -24,6 +59,7 @@ export default function BookingForm() {
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -49,6 +85,12 @@ export default function BookingForm() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (isSunday(date)) {
+      setSelectedSlot(null);
+      setStatus("error");
+      setErrorMsg("Sundays are unavailable for appointments.");
+      return;
+    }
     if (!selectedSlot) return;
     setStatus('loading');
     setErrorMsg('');
@@ -59,6 +101,7 @@ export default function BookingForm() {
         body: JSON.stringify({
           name,
           email,
+          phone,
           startTime: selectedSlot.start.toISOString(),
           endTime: selectedSlot.end.toISOString(),
         }),
@@ -102,8 +145,20 @@ export default function BookingForm() {
         <input
           type="date"
           value={date}
-          min={new Date().toLocaleDateString("en-CA")}
-          onChange={e => { setDate(e.target.value); setSelectedSlot(null); setStatus("idle"); }}
+          min={torontoTodayISODate()}
+          onChange={e => {
+            const nextDate = e.target.value;
+            setSelectedSlot(null);
+            if (isSunday(nextDate)) {
+              setDate("");
+              setStatus("error");
+              setErrorMsg("Sundays are unavailable for appointments.");
+              return;
+            }
+            setDate(nextDate);
+            setStatus("idle");
+            setErrorMsg("");
+          }}
           required
           className="mt-2 w-full px-4 py-3 text-sm outline-none"
           style={{ background: "#FFF9F5", border: "1px solid rgba(121,65,55,.28)", color: "#2C1810" }}
@@ -132,11 +187,20 @@ export default function BookingForm() {
                 }}
                 className="px-3 py-3 text-xs transition-colors disabled:cursor-not-allowed"
               >
-                {slot.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {slot.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: STUDIO_TIMEZONE })}
                 {taken ? " · Booked" : ""}
               </button>
             );
           })}
+          </div>
+        </div>
+      )}
+
+      {date && (
+        <div className="mt-6 flex gap-3 border-l-[3px] p-4" style={{ background: "rgba(121,65,55,.08)", borderColor: "#794137" }}>
+          <div>
+            <p className="mb-1 text-xs font-semibold tracking-[0.14em] uppercase" style={{ color: "#794137" }}>Consultation fee</p>
+            <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>$50 to secure your appointment, credited toward your garment when you proceed.</p>
           </div>
         </div>
       )}
@@ -151,6 +215,19 @@ export default function BookingForm() {
         Email
         <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="mt-2 w-full px-4 py-3 text-sm outline-none" style={{ background: "#FFF9F5", border: "1px solid rgba(121,65,55,.28)", color: "#2C1810" }} />
       </label>
+
+      <label className="block text-xs font-semibold tracking-[0.14em] uppercase" style={{ color: "#5A3A30" }}>
+  Phone number
+  <div className="mt-2 phone-input-wrapper">
+    <PhoneInput
+      international
+      defaultCountry="CA"
+      value={phone}
+      onChange={value => setPhone(value || "")}
+      required
+    />
+  </div>
+</label>
       </div>
 
       <button type="submit" disabled={!selectedSlot || status === "loading"} className="mt-7 w-full px-5 py-4 text-xs font-bold tracking-[0.18em] uppercase transition-opacity disabled:cursor-not-allowed disabled:opacity-45" style={{ background: "#794137", color: "#ECE1D8" }}>

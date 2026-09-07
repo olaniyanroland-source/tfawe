@@ -161,7 +161,7 @@ export function Layout() {
                   className="w-fit px-6 py-3 text-xs tracking-[0.18em] uppercase"
                   style={{ background: "#794137", color: "#ECE1D8" }}
                 >
-                  Book Now
+                  Book a Consultation
                 </Link>
               </div>
             </motion.div>

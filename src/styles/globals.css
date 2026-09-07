@@ -2,3 +2,23 @@ html, body {
   max-width: 100%;
   overflow-x: clip;
 }
+.phone-input-wrapper .PhoneInput {
+  display: flex;
+  align-items: center;
+  background: #FFF9F5;
+  border: 1px solid rgba(121, 65, 55, 0.28);
+  padding: 0.5rem 1rem;
+}
+
+.phone-input-wrapper .PhoneInputInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.875rem;
+  color: #2C1810;
+  flex: 1;
+}
+
+.phone-input-wrapper .PhoneInputCountrySelect {
+  margin-right: 0.5rem;
+}

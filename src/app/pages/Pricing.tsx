@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router";
 import { motion, useInView, AnimatePresence } from "motion/react";
 import { ArrowRight, Check } from "lucide-react";
@@ -6,6 +6,14 @@ import jacketImage from "../../assets/Tfawesuit.JPG";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 const darkSectionTextShadow = "0 1px 8px rgba(26,14,11,.65)";
+
+// Fallback rates, used until live rates load (or if the fetch fails)
+const FALLBACK_RATES: Record<string, number> = {
+  CAD: 1,
+  USD: 0.7226,
+  GBP: 0.5338,
+  EUR: 0.6220,
+};
 
 function Reveal({ children, delay = 0, y = 32, className = "" }: {
   children: React.ReactNode; delay?: number; y?: number; className?: string;
@@ -29,19 +37,19 @@ const CONSTRUCTION_TABS: { key: ConstructionKey; label: string; description: str
   { key: "handMade", label: "Hand Made", level: "Premium",  description: "Canvas runs through the entire front of the jacket. The gold standard of construction for discerning clients." },
 ];
 
-const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: string; category: string }[] = [
-  { name: "2-Piece Suit",  fused: "$699",  halfCanvas: "$1500",   fullCanvas: "$2,500", category: "Suits" },
-  { name: "3-Piece Suit",  fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", category: "Suits" },
-  { name: "Tuxedo Suit",   fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$2,800", category: "Suits" },
-  { name: "Jacket",        fused: "$449",  halfCanvas: "$1,000", fullCanvas: "$1,600", category: "Separates" },
-  { name: "Trousers",      fused: "$240",  halfCanvas: "$500",   fullCanvas: "$750",   category: "Separates" },
-  { name: "Waistcoat",     fused: "$250",  halfCanvas: "$400",   fullCanvas: "$600",   category: "Separates" },
-  { name: "Overcoat",      fused: "$699",  halfCanvas: "$1,500", fullCanvas: "$2,200", category: "Outerwear" },
-  { name: "Regular Shirt", fused: "$220",  halfCanvas: "—",      fullCanvas: "—",      category: "Shirts" },
-  { name: "Tuxedo Shirt",  fused: "$250",  halfCanvas: "—",      fullCanvas: "—",      category: "Shirts" },
+const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: string; handMade: string; category: string }[] = [
+  { name: "2-Piece Suit",  fused: "$699",  halfCanvas: "$1500",   fullCanvas: "$1,500", handMade: "$2,500", category: "Suits" },
+  { name: "3-Piece Suit",  fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$1,800", handMade: "$2,800", category: "Suits" },
+  { name: "Tuxedo Suit",   fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$1,800", handMade: "$2,800", category: "Suits" },
+  { name: "Jacket",        fused: "$449",  halfCanvas: "$1,000", fullCanvas: "$1,000", handMade: "$1,600", category: "Separates" },
+  { name: "Trousers",      fused: "$240",  halfCanvas: "$500",   fullCanvas: "$500",   handMade: "$750",   category: "Separates" },
+  { name: "Waistcoat",     fused: "$250",  halfCanvas: "$400",   fullCanvas: "$400",   handMade: "$600",   category: "Separates" },
+  { name: "Overcoat",      fused: "$699",  halfCanvas: "$1,500", fullCanvas: "$1,500", handMade: "$2,200", category: "Outerwear" },
+  { name: "Regular Shirt", fused: "$220",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",      category: "Shirts" },
+  { name: "Tuxedo Shirt",  fused: "$250",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",      category: "Shirts" },
 ];
 
-  const INCLUDES = [
+const INCLUDES = [
   "Complimentary 15-min discovery call",
   "Expert fabric consultation",
   "Precision body measurements",
@@ -52,29 +60,53 @@ const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: s
 export function Pricing() {
   const [activeTab, setActiveTab] = useState<ConstructionKey>("fused");
   const [currency, setCurrency] = useState<'CAD'|'USD'|'GBP'|'EUR'>('CAD');
-  const RATES: Record<string, number> = {
-    CAD: 1,
-    USD: 0.7226, // 1 CAD = 0.7226 USD
-    GBP: 0.5300, // 1 CAD = 0.5300 GBP
-    EUR: 0.6200, // 1 CAD = 0.6200 EUR
-  };
+  const [rates, setRates] = useState<Record<string, number>>(FALLBACK_RATES);
+  const [ratesLoaded, setRatesLoaded] = useState(false);
+
+  // Fetch live CAD-based exchange rates once on mount
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchRates() {
+      try {
+        const res = await fetch(
+          "https://api.frankfurter.app/latest?from=CAD&to=USD,GBP,EUR"
+        );
+        if (!res.ok) throw new Error("Rate fetch failed");
+        const data = await res.json();
+        if (!cancelled && data?.rates) {
+          setRates({
+            CAD: 1,
+            USD: data.rates.USD ?? FALLBACK_RATES.USD,
+            GBP: data.rates.GBP ?? FALLBACK_RATES.GBP,
+            EUR: data.rates.EUR ?? FALLBACK_RATES.EUR,
+          });
+          setRatesLoaded(true);
+        }
+      } catch (e) {
+        // Silently keep fallback rates — no need to show an error to visitors
+        console.warn("Using fallback exchange rates:", e);
+      }
+    }
+
+    fetchRates();
+    return () => { cancelled = true; };
+  }, []);
 
   function formatPrice(raw: string) {
     if (!raw) return raw;
     if (raw === '—') return raw;
     if (raw === 'POA') return 'Contact for pricing';
 
-    // strip currency symbol and commas
     const numeric = parseFloat(raw.replace(/[^0-9.]/g, ''));
     if (Number.isNaN(numeric)) return raw;
 
-    const rate = RATES[currency] ?? 1;
+    const rate = rates[currency] ?? 1;
     const converted = numeric * rate;
 
     try {
       return new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 0 }).format(converted);
     } catch (e) {
-      // fallback: simple formatting
       return `${currency} ${Math.round(converted).toLocaleString()}`;
     }
   }
@@ -149,7 +181,7 @@ export function Pricing() {
 
           {/* Currency selector (on its own line) */}
           <Reveal delay={0.02}>
-            <div className="flex flex-wrap justify-center gap-2 mb-6">
+            <div className="flex flex-wrap justify-center gap-2 mb-2">
               {(['CAD','USD','GBP','EUR'] as const).map(c => (
                 <button
                   key={c}
@@ -167,6 +199,13 @@ export function Pricing() {
                 </button>
               ))}
             </div>
+          </Reveal>
+
+          {/* Rate freshness note */}
+          <Reveal delay={0.03}>
+            <p className="mb-6 text-center text-[10px] tracking-[0.08em]" style={{ color: "rgba(179,144,133,.4)" }}>
+              {ratesLoaded ? "Live exchange rates" : "Estimated exchange rates"}
+            </p>
           </Reveal>
 
           {/* Description */}
@@ -238,7 +277,7 @@ export function Pricing() {
               style={{ background: "rgba(121,65,55,.12)", border: "1px solid rgba(121,65,55,.2)" }}
             >
               <p className="text-xs leading-relaxed flex-1" style={{ color: "rgba(179,144,133,.55)" }}>
-                All prices are starting prices. USD, GBP, and EUR amounts are converted from the CAD price and rounded to the nearest whole unit; final cost depends on fabric selection and complexity.
+                All prices are starting prices. USD, GBP, and EUR amounts are converted from the CAD price at current market exchange rates and rounded to the nearest whole unit; final cost depends on fabric selection and complexity.
               </p>
               <Link
                 to="/appointment"
