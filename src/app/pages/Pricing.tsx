@@ -33,8 +33,8 @@ type ConstructionKey = "fused" | "fullCanvas" | "handMade";
 
 const CONSTRUCTION_TABS: { key: ConstructionKey; label: string; description: string; level: string }[] = [
   { key: "fused",      label: "Fused",       level: "Entry",    description: "Structured construction using fusible interlining. Entry level  clean finish, great for everyday suiting." },
-  { key: "fullCanvas", label: "Full Canvas", level: "Better",   description: "Canvas through the chest and lapel area. Better structure, superior drape and longevity over fused." },
-  { key: "handMade", label: "Hand Made", level: "Premium",  description: "Canvas runs through the entire front of the jacket. The gold standard of construction for discerning clients." },
+  { key: "fullCanvas", label: "Full Canvas", level: "Premium Construction",   description: "Canvas runs through the entire front of the jacket." },
+  { key: "handMade", label: "Hand Made", level: "Highest Level",  description: " Extensive handwork and traditional tailoring techniques." },
 ];
 
 const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: string; handMade: string; category: string }[] = [
