@@ -157,6 +157,7 @@ export function SelectedWork() {
               <img
                 src={img}
                 alt={title}
+                loading="lazy"
                 decoding="async"
                 onError={handleImageError}
                 className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105 group-hover:opacity-90"

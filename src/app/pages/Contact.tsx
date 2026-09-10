@@ -35,7 +35,7 @@ const INFO = [
   {
     icon: <Mail size={18} />,
     label: "Email",
-    lines: ["hello@tfawe.ca"],
+    lines: ["info@tfawe.ca"],
   },
   {
     icon: <Clock size={18} />,

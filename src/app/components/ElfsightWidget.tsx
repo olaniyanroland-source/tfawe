@@ -12,10 +12,12 @@ export function ElfsightWidget({ appId, className = "", style }: ElfsightWidgetP
   const widgetRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const refreshElfsight = () => {
-      document
-        .querySelectorAll<HTMLScriptElement>(`script[src^="${ELFSIGHT_SCRIPT_SRC}"]`)
-        .forEach(script => script.remove());
+    const widget = widgetRef.current;
+    if (!widget) return;
+
+    const loadWidget = () => {
+      const existingScript = document.querySelector<HTMLScriptElement>(`script[src^="${ELFSIGHT_SCRIPT_SRC}"]`);
+      if (existingScript) return;
 
       const script = document.createElement("script");
       script.src = ELFSIGHT_SCRIPT_SRC;
@@ -24,8 +26,14 @@ export function ElfsightWidget({ appId, className = "", style }: ElfsightWidgetP
       document.body.appendChild(script);
     };
 
-    const frame = window.requestAnimationFrame(refreshElfsight);
-    return () => window.cancelAnimationFrame(frame);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry?.isIntersecting) return;
+      loadWidget();
+      observer.disconnect();
+    }, { rootMargin: "300px" });
+
+    observer.observe(widget);
+    return () => observer.disconnect();
   }, [appId]);
 
   return (

@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import heroVideo from "../../assets/tfawefinevideo.mp4";
+import heroVideo from "../../assets/tfawefinevideo.MP4";
 import secondHeroVideo from "../../assets/meninsuit2.mp4";
 import suit2Image from "../../assets/suit2.webp";
 import suit5Image from "../../assets/suit5.webp";
@@ -36,7 +36,7 @@ const EDITORIAL = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Our Story",    sub: "Est. 2014 · Toronto",              to: "/about",       img: "https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=600&h=400&fit=crop&fm=jpg&q=80" },
+  { label: "Our Story",    sub: "Est. 2022 · Toronto",              to: "/about",       img: "https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=600&h=400&fit=crop&fm=jpg&q=80" },
   { label: "Pricing",      sub: "Bespoke tailoring, clearly priced", to: "/pricing",     img: suit2Image },
   { label: "Book a Fit",   sub: "Begin with a personal consultation", to: "/appointment", img: suit8Image },
   { label: "Contact",      sub: "Visit our Toronto atelier",          to: "/contact",     img: suit5Image },
@@ -49,22 +49,42 @@ function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
 
 export function Home() {
   const [activeVideo, setActiveVideo] = useState(0);
+  const [videoEnabled, setVideoEnabled] = useState(false);
   const heroVideos = [heroVideo, secondHeroVideo];
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (prefersReducedMotion || connection?.saveData) return;
+
+    const timer = window.setTimeout(() => setVideoEnabled(true), 2500);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <div>
       {/* ── HERO ── */}
       <section className="relative w-full overflow-hidden" style={{ height: "100svh", minHeight: 620 }}>
-        <video
-          key={activeVideo}
+        <img
+          src={tfaweWorkImage}
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ filter: "brightness(1.3)" }}
-          autoPlay muted playsInline
-          onEnded={() => setActiveVideo(current => (current + 1) % heroVideos.length)}
-          poster="https://images.unsplash.com/photo-1600091166971-7f9faad6c1e2?w=1920&h=1080&fit=crop&fm=jpg&q=80"
-        >
-          <source src={heroVideos[activeVideo]} type="video/mp4" />
-        </video>
+        />
+        {videoEnabled && (
+          <video
+            key={activeVideo}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: "brightness(1.3)" }}
+            autoPlay muted playsInline preload="metadata"
+            onEnded={() => setActiveVideo(current => (current + 1) % heroVideos.length)}
+          >
+            <source src={heroVideos[activeVideo]} type="video/mp4" />
+          </video>
+        )}
         <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(47,29,21,.28) 0%,rgba(121,65,55,.24) 38%,rgba(214,166,137,.18) 64%,rgba(47,29,21,.22) 100%)" }} />
         <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(26,14,11,.34) 0%,rgba(26,14,11,.16) 48%,rgba(26,14,11,0) 100%)" }} />
         <div className="absolute bottom-0 left-0 right-0 h-44" style={{ background: "linear-gradient(to top,#ECE1D8,transparent)" }} />
@@ -119,25 +139,27 @@ export function Home() {
           >
             Book a Consultation <ArrowRight size={13} />
           </Link>
-          <div
-            className="flex items-center gap-2"
-            aria-label={`Hero video ${activeVideo + 1} of ${heroVideos.length}`}
-          >
-            {heroVideos.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                aria-label={`Show hero video ${index + 1}`}
-                aria-current={activeVideo === index}
-                onClick={() => setActiveVideo(index)}
-                className="h-1.5 rounded-full transition-all duration-300"
-                style={{
-                  width: activeVideo === index ? 24 : 6,
-                  background: activeVideo === index ? "#ECE1D8" : "rgba(236,225,216,.45)",
-                }}
-              />
-            ))}
-          </div>
+          {videoEnabled && (
+            <div
+              className="flex items-center gap-2"
+              aria-label={`Hero video ${activeVideo + 1} of ${heroVideos.length}`}
+            >
+              {heroVideos.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  aria-label={`Show hero video ${index + 1}`}
+                  aria-current={activeVideo === index}
+                  onClick={() => setActiveVideo(index)}
+                  className="h-1.5 rounded-full transition-all duration-300"
+                  style={{
+                    width: activeVideo === index ? 24 : 6,
+                    background: activeVideo === index ? "#ECE1D8" : "rgba(236,225,216,.45)",
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </motion.div>
       </section>
 

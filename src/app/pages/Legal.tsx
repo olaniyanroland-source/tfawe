@@ -12,7 +12,7 @@ const CONTENT: Record<LegalType, { eyebrow: string; title: string; intro: string
       { heading: "How we use information", body: ["We use your information to respond to enquiries, arrange consultations, provide our services, improve the website, and send updates where you have chosen to receive them. We do not sell personal information."] },
       { heading: "Service providers", body: ["We use carefully selected third parties to operate parts of our website and booking experience. Calendly processes appointment scheduling information under its own privacy practices. These providers may process information only as needed to deliver their services."] },
       { heading: "Your choices", body: ["You may ask to access, correct, or delete personal information we hold about you, subject to applicable legal requirements. You may unsubscribe from marketing emails at any time using the link in the email or by contacting us."] },
-      { heading: "Contact", body: ["For privacy questions or requests, email hello@tfawe.com. We may update this policy from time to time; the latest version will always appear on this page."] },
+      { heading: "Contact", body: ["For privacy questions or requests, email info@tfawe.com. We may update this policy from time to time; the latest version will always appear on this page."] },
     ],
   },
   terms: {
@@ -24,7 +24,7 @@ const CONTENT: Record<LegalType, { eyebrow: string; title: string; intro: string
       { heading: "Appointments and enquiries", body: ["Booking a consultation or sending an enquiry does not create a purchase agreement. Any garment order, scope of work, timing, pricing, deposits, and payment terms will be confirmed separately with you."] },
       { heading: "Intellectual property", body: ["The TFawe name, logo, website design, photographs, text, and other site content are owned by or licensed to TFawe. You may view the site for personal, non-commercial use, but may not reproduce or use its content without permission."] },
       { heading: "Acceptable use", body: ["Do not interfere with the website, attempt unauthorized access, submit harmful material, or use the site in a way that infringes another person's rights. We may restrict access where necessary to protect the site or our visitors."] },
-      { heading: "Third-party services", body: ["This website may link to or use services operated by third parties, including Instagram and Calendly. We are not responsible for their content, availability, or privacy practices. Questions about these terms may be sent to hello@tfawe.com."] },
+      { heading: "Third-party services", body: ["This website may link to or use services operated by third parties, including Instagram and Calendly. We are not responsible for their content, availability, or privacy practices. Questions about these terms may be sent to info@tfawe.com."] },
     ],
   },
   cookies: {
@@ -36,7 +36,7 @@ const CONTENT: Record<LegalType, { eyebrow: string; title: string; intro: string
       { heading: "How we use them", body: ["We may use essential cookies needed for website operation and cookies placed by third-party services embedded on the site. When you use the Calendly booking widget, Calendly may set cookies or use similar technologies to provide scheduling, security, and preference features."] },
       { heading: "Managing cookies", body: ["You can control or delete cookies through your browser settings. Blocking some cookies may affect website features, including appointment booking. Consult your browser's help materials for instructions on managing cookie preferences."] },
       { heading: "Third-party cookies", body: ["Third-party services operate under their own policies. For more information about the scheduling widget, review Calendly's privacy and cookie information directly. We do not control cookies set by third parties."] },
-      { heading: "Updates and contact", body: ["We may revise this policy as our website or services change. For questions about cookies on this website, contact hello@tfawe.com."] },
+      { heading: "Updates and contact", body: ["We may revise this policy as our website or services change. For questions about cookies on this website, contact info@tfawe.com."] },
     ],
   },
 };

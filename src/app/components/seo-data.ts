@@ -1,0 +1,45 @@
+export const SITE_URL = "https://www.tfawe.ca";
+export const DEFAULT_TITLE = "TFawe | Custom Menswear & Bespoke Tailoring in Toronto";
+export const DEFAULT_DESCRIPTION =
+  "TFawe is a Toronto custom menswear house offering bespoke suits, personal styling, shirts, outerwear, eyewear, and private consultations.";
+
+export type PageMetadata = { title: string; description: string; noIndex?: boolean };
+
+export const PAGES: Record<string, PageMetadata> = {
+  "/": {
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  "/about": {
+    title: "About TFawe | Toronto Custom Menswear House",
+    description: "Meet TFawe, the Toronto custom menswear house founded by Tunde Fawe and built around exceptional fit, personal style, and timeless design.",
+  },
+  "/pricing": {
+    title: "Custom Suit Pricing | TFawe Toronto",
+    description: "Explore TFawe pricing for made-to-measure suits, tuxedos, jackets, trousers, shirts, and outerwear in Toronto.",
+  },
+  "/accessories": {
+    title: "Eyewear & Accessories | TFawe Toronto",
+    description: "Discover TFawe's curated accessories and eyewear collection, selected to complete a considered custom wardrobe.",
+  },
+  "/appointment": {
+    title: "Book a Custom Menswear Consultation | TFawe Toronto",
+    description: "Book a private TFawe consultation in Toronto for bespoke suiting, personal styling, wardrobe advice, and made-to-measure menswear.",
+  },
+  "/contact": {
+    title: "Contact TFawe | Custom Menswear in Toronto",
+    description: "Contact TFawe in Toronto to discuss bespoke suits, personal styling, appointments, and custom menswear services.",
+  },
+  "/privacy-policy": {
+    title: "Privacy Policy | TFawe",
+    description: "Learn how TFawe collects, uses, and protects personal information.",
+  },
+  "/terms-of-use": {
+    title: "Terms of Use | TFawe",
+    description: "Read the terms governing use of the TFawe website.",
+  },
+  "/cookie-policy": {
+    title: "Cookie Policy | TFawe",
+    description: "Learn how TFawe uses cookies and similar technologies on this website.",
+  },
+};

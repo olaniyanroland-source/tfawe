@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import logo from "../../assets/transparent2.png";
 import { Outlet, NavLink, useLocation, Link } from "react-router";
-import { Menu, X } from "lucide-react";
-import InstagramIcon from "@mui/icons-material/Instagram";
+import { Instagram, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { OrganizationSchema, Seo } from "../components/Seo";
+import { Seo } from "../components/Seo";
 
 const NAV = [
   { label: "Home",        to: "/" },
@@ -15,7 +14,7 @@ const NAV = [
 ];
 
 const SOCIALS = [
-  { label: "Instagram", href: "https://www.instagram.com/tfawe_/", Icon: InstagramIcon },
+  { label: "Instagram", href: "https://www.instagram.com/tfawe_/", Icon: Instagram },
 ];
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mppzqwyn";
 
@@ -79,7 +78,6 @@ export function Layout() {
   return (
     <div style={{ fontFamily: "'Raleway', sans-serif", background: "#ECE1D8" }}>
       <Seo />
-      <OrganizationSchema />
       {/* ── Nav ── */}
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
