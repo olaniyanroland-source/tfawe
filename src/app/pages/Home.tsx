@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import heroVideo from "../../assets/tfawevideoraw.mp4";
+import heroVideo from "../../assets/tfawefinevideo.mp4";
 import secondHeroVideo from "../../assets/meninsuit2.mp4";
 import suit2Image from "../../assets/suit2.webp";
 import suit5Image from "../../assets/suit5.webp";
