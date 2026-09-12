@@ -1,7 +1,7 @@
 {
   "/": {
-    "title": "TFawe | Custom Menswear & Bespoke Tailoring in Toronto",
-    "description": "TFawe is a Toronto custom menswear house offering bespoke suits, personal styling, shirts, outerwear, eyewear, and private consultations."
+    "title": "TFawe | Custom Made Tailoring & Personal Styling in Toronto",
+    "description": "TFawe is a Toronto custom menswear house offering custom-made suits, personal styling, shirts, outerwear, eyewear, and private consultations."
   },
   "/about": {
     "title": "About TFawe | Toronto Custom Menswear House",
@@ -17,11 +17,11 @@
   },
   "/appointment": {
     "title": "Book a Custom Menswear Consultation | TFawe Toronto",
-    "description": "Book a private TFawe consultation in Toronto for bespoke suiting, personal styling, wardrobe advice, and made-to-measure menswear."
+    "description": "Book a private TFawe consultation in Toronto for custom-made suiting, personal styling, wardrobe advice, and made-to-measure menswear."
   },
   "/contact": {
     "title": "Contact TFawe | Custom Menswear in Toronto",
-    "description": "Contact TFawe in Toronto to discuss bespoke suits, personal styling, appointments, and custom menswear services."
+    "description": "Contact TFawe in Toronto to discuss custom-made suits, personal styling, appointments, and custom menswear services."
   },
   "/privacy-policy": {
     "title": "Privacy Policy | TFawe",

@@ -2,6 +2,35 @@ html, body {
   max-width: 100%;
   overflow-x: clip;
 }
+
+/* Keep hero media pinned to the hero bounds at every viewport size.  The
+   source video can have a different aspect ratio from a desktop screen, so
+   `cover` fills both axes rather than exposing empty space at either edge. */
+.hero {
+  isolation: isolate;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 1024px) {
+  .hero__media {
+    /* Avoid a visible edge from sub-pixel rounding on wide desktop screens. */
+    transform: scale(1.002);
+  }
+}
+
 .phone-input-wrapper .PhoneInput {
   display: flex;
   align-items: center;

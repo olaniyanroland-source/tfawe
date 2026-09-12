@@ -130,7 +130,7 @@ export default function BookingForm() {
       <div className="p-8 sm:p-10" role="status">
         <p className="mb-3 text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "#794137" }}>Booking confirmed</p>
         <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", color: "#2C1810" }}>Thank you, {name}.</h3>
-        <p className="mt-3 text-sm leading-relaxed" style={{ color: "#5A3A30" }}>Your appointment is reserved. Please check your email for the confirmation details.</p>
+        <p className="mt-3 text-sm leading-relaxed" style={{ color: "#5A3A30" }}>Your appointment is reserved. Please check your email for the next step.</p>
       </div>
     );
   }
@@ -200,7 +200,8 @@ export default function BookingForm() {
         <div className="mt-6 flex gap-3 border-l-[3px] p-4" style={{ background: "rgba(121,65,55,.08)", borderColor: "#794137" }}>
           <div>
             <p className="mb-1 text-xs font-semibold tracking-[0.14em] uppercase" style={{ color: "#794137" }}>Consultation fee</p>
-            <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>$50 to secure your appointment, credited toward your garment when you proceed.</p>
+            <p className="text-sm leading-relaxed" style={{ color: "#5A3A30" }}>A $50 appointment fee is required to secure your appointment. This fee is fully credited toward your garment purchase when you proceed.
+</p>
           </div>
         </div>
       )}

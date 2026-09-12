@@ -64,20 +64,20 @@ export function Home() {
   return (
     <div>
       {/* ── HERO ── */}
-      <section className="relative w-full overflow-hidden" style={{ height: "100svh", minHeight: 620 }}>
+      <section className="hero relative w-full overflow-hidden" style={{ height: "100svh", minHeight: 620 }}>
         <img
           src={tfaweWorkImage}
           alt=""
           aria-hidden="true"
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="hero__media"
           style={{ filter: "brightness(1.3)" }}
         />
         {videoEnabled && (
           <video
             key={activeVideo}
-            className="absolute inset-0 w-full h-full object-cover"
+            className="hero__media"
             style={{ filter: "brightness(1.3)" }}
             autoPlay muted playsInline preload="metadata"
             onEnded={() => setActiveVideo(current => (current + 1) % heroVideos.length)}
