@@ -63,6 +63,9 @@ const pagesJsonPath = path.join(ROOT, "src", "app", "components", "seo-pages.jso
       fs.writeFileSync(indexPath, html);
       console.log(`✔ Updated dist/index.html for "/"`);
     } else {
+      // The hero video is only used on the home page. Do not make other
+      // statically generated routes download this large above-the-fold asset.
+      html = html.replace(/\s*<link data-hero-video-preload[^>]*>\s*/, "\n");
       const outDir = path.join(DIST_DIR, route.replace(/^\//, ""));
       fs.mkdirSync(outDir, { recursive: true });
       fs.writeFileSync(path.join(outDir, "index.html"), html);

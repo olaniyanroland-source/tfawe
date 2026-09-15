@@ -49,16 +49,18 @@ function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
 
 export function Home() {
   const [activeVideo, setActiveVideo] = useState(0);
-  const [videoEnabled, setVideoEnabled] = useState(false);
+  // Render the first hero video with the initial React UI. Its document-level
+  // preload starts the download while the page loads; this used to wait 2.5
+  // seconds, then request metadata only.
+  const [videoEnabled, setVideoEnabled] = useState(true);
   const heroVideos = [heroVideo, secondHeroVideo];
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    if (prefersReducedMotion || connection?.saveData) return;
-
-    const timer = window.setTimeout(() => setVideoEnabled(true), 2500);
-    return () => window.clearTimeout(timer);
+    if (prefersReducedMotion || connection?.saveData) {
+      setVideoEnabled(false);
+    }
   }, []);
 
   return (
@@ -79,7 +81,7 @@ export function Home() {
             key={activeVideo}
             className="hero__media"
             style={{ filter: "brightness(1.3)" }}
-            autoPlay muted playsInline preload="metadata"
+            autoPlay muted playsInline preload="auto"
             onEnded={() => setActiveVideo(current => (current + 1) % heroVideos.length)}
           >
             <source src={heroVideos[activeVideo]} type="video/mp4" />
