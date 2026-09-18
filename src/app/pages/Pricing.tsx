@@ -32,7 +32,7 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 type ConstructionKey = "fused" | "fullCanvas" | "handMade";
 
 const CONSTRUCTION_TABS: { key: ConstructionKey; label: string; description: string; level: string }[] = [
-  { key: "fused",      label: "Fused",       level: "Entry",    description: "Structured construction using fusible interlining. Entry level  clean finish, great for everyday suiting." },
+  { key: "fused",      label: "Half Canvas", level: "Entry",    description: "Canvas through the chest and lapel area. Better structure, drape and longevity." },
   { key: "fullCanvas", label: "Full Canvas", level: "Premium Construction",   description: "Canvas runs through the entire front of the jacket." },
   { key: "handMade", label: "Hand Made", level: "Highest Level",  description: " Extensive handwork and traditional tailoring techniques." },
 ];
