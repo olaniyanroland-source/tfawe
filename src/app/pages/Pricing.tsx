@@ -130,12 +130,9 @@ export function Pricing() {
         <div className="max-w-5xl mx-auto space-y-16">
           <Reveal y={16}>
             <div>
-              <h2 className="mb-5 text-2xl sm:text-3xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400, color: "#2C1810" }}>
-                Custom-Made Price Guide
-              </h2>
               <div className="mb-5 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between" style={{ borderColor: "rgba(121,65,55,.2)" }}>
-                <div>
-                  <p className="mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "#794137" }}>
+                <div className="flex items-center justify-between gap-2 sm:block">
+                  <p className="mb-0 whitespace-nowrap text-[9px] font-bold tracking-[0.08em] uppercase sm:mb-2 sm:text-[10px] sm:tracking-[0.2em]" style={{ color: "#794137" }}>
                     View prices in
                   </p>
                   <div role="group" aria-label="Select price currency" className="inline-flex rounded border p-1" style={{ background: "#FFF9F5", borderColor: "rgba(121,65,55,.24)" }}>
@@ -150,7 +147,7 @@ export function Pricing() {
                           aria-pressed={selected}
                           disabled={unavailable}
                           onClick={() => setCurrency(code)}
-                          className="min-w-14 px-3 py-2 text-xs font-bold tracking-[0.08em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                          className="min-w-10 px-2 py-2 text-xs font-bold tracking-[0.08em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:min-w-14 sm:px-3"
                           style={{
                             background: selected ? "#794137" : "transparent",
                             color: selected ? "#ECE1D8" : unavailable ? "rgba(90,58,48,.4)" : "#5A3A30",
@@ -175,6 +172,12 @@ export function Pricing() {
               <p className="mb-8 text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
                 Base prices are in CAD and shown in the selected currency. Final pricing depends on fabric selection and design details.
               </p>
+              <h2
+                className="mb-8 px-4 py-3 text-lg tracking-[0.06em] sm:px-5 sm:py-4 sm:text-xl"
+                style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400, color: "#2C1810", background: "rgba(121,65,55,.06)", border: "1px solid rgba(121,65,55,.22)", borderLeft: "4px solid #794137" }}
+              >
+                CUSTOM-MADE PRICE GUIDE
+              </h2>
               <div>
                 <table className="w-full table-fixed border-collapse text-left" style={{ color: "#2C1810", fontFamily: "'Raleway', sans-serif" }}>
                   <colgroup>
@@ -208,12 +211,18 @@ export function Pricing() {
                   </tbody>
                 </table>
               </div>
+              <p className="mt-6 text-base sm:text-lg"><strong>Delivery Timeframe:</strong> 3–4 weeks</p>
             </div>
           </Reveal>
 
           <Reveal delay={0.08} y={16}>
             <div className="border-t pt-10" style={{ borderColor: "rgba(121,65,55,.24)", color: "#2C1810" }}>
-              <h2 className="mb-8 text-2xl sm:text-3xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400 }}>Handmade (Bespoke) Price Guide</h2>
+              <h2
+                className="mb-8 px-4 py-3 text-lg tracking-[0.06em] sm:px-5 sm:py-4 sm:text-xl"
+                style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400, color: "#2C1810", background: "rgba(121,65,55,.06)", border: "1px solid rgba(121,65,55,.22)", borderLeft: "4px solid #794137" }}
+              >
+                HANDMADE (BESPOKE) PRICE GUIDE
+              </h2>
               <h3 className="mb-5 text-lg italic sm:text-xl" style={{ fontFamily: "'Playfair Display', serif" }}>Full-Canvas Construction</h3>
               <ul className="mb-8 space-y-3 text-base sm:text-lg">
                 {HANDMADE_PRICES.map(({ label, price }, index) => (

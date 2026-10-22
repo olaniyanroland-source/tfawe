@@ -47,7 +47,13 @@ export function Appointment() {
             <h2 className="mb-4" style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem,4vw,3.4rem)", fontWeight: 400, color: "#2C1810", lineHeight: 1.1 }}>
               Made for <em style={{ color: "#794137" }}>you.</em>
             </h2>
-            <p className="mb-7 max-w-md text-sm leading-relaxed" style={{ color: "#5A3A30" }}>Choose a time for a relaxed, one-to-one styling consultation.</p>
+            <p className="mb-3 max-w-md text-sm leading-relaxed" style={{ color: "#5A3A30" }}>Choose a time for a relaxed, one-to-one styling consultation.</p>
+            <p className="mb-2 max-w-md text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
+              A private consultation with Tunde Fawe, Founder &amp; Creative Director of TFawe.
+            </p>
+            <p className="mb-7 text-xs font-semibold tracking-[0.12em]" style={{ color: "#794137" }}>
+              60 minutes. In Person
+            </p>
             <div className="overflow-hidden" style={{ aspectRatio: "4/3", background: "#D9CBBF" }}>
               <img src={fabricBookImage} alt="Fabric selection" className="h-full w-full object-cover" />
             </div>
