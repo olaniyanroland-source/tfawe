@@ -4,6 +4,7 @@ import { motion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import heroVideo from "../../assets/tfawefinevideo.MP4";
 import secondHeroVideo from "../../assets/meninsuit2.mp4";
+import heroFallbackImage from "../../assets/fb.PNG";
 import suit2Image from "../../assets/suit2.webp";
 import suit5Image from "../../assets/suit5.webp";
 import suit6Image from "../../assets/suit6.webp";
@@ -68,7 +69,7 @@ export function Home() {
       {/* ── HERO ── */}
       <section className="hero relative w-full overflow-hidden" style={{ height: "100svh", minHeight: 620 }}>
         <img
-          src={tfaweWorkImage}
+          src={heroFallbackImage}
           alt=""
           aria-hidden="true"
           fetchPriority="high"

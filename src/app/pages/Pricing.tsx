@@ -1,19 +1,14 @@
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import { motion, useInView, AnimatePresence } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { ArrowRight, Check } from "lucide-react";
 import jacketImage from "../../assets/Tfawesuit.JPG";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
-const darkSectionTextShadow = "0 1px 8px rgba(26,14,11,.65)";
 
-// Fallback rates, used until live rates load (or if the fetch fails)
-const FALLBACK_RATES: Record<string, number> = {
-  CAD: 1,
-  USD: 0.7226,
-  GBP: 0.5338,
-  EUR: 0.6220,
-};
+type Currency = "CAD" | "USD" | "GBP" | "EUR";
+type CurrencyRates = Record<Currency, number>;
+const CURRENCIES: Currency[] = ["CAD", "USD", "GBP", "EUR"];
 
 function Reveal({ children, delay = 0, y = 32, className = "" }: {
   children: React.ReactNode; delay?: number; y?: number; className?: string;
@@ -29,24 +24,19 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
   );
 }
 
-type ConstructionKey = "fused" | "fullCanvas" | "handMade";
-
-const CONSTRUCTION_TABS: { key: ConstructionKey; label: string; description: string; level: string }[] = [
-  { key: "fused",      label: "Half Canvas", level: "Entry",    description: "Canvas through the chest and lapel area. Better structure, drape and longevity." },
-  { key: "fullCanvas", label: "Full Canvas", level: "Premium Construction",   description: "Canvas runs through the entire front of the jacket." },
-  { key: "handMade", label: "Hand Made", level: "Highest Level",  description: " Extensive handwork and traditional tailoring techniques." },
+const CUSTOM_MADE_PRICES = [
+  { garment: "Suits", halfCanvas: 1000, fullCanvas: 1500 },
+  { garment: "Jackets", halfCanvas: 760, fullCanvas: 1260 },
+  { garment: "Trousers", halfCanvas: 240, fullCanvas: 240 },
+  { garment: "Waistcoats", halfCanvas: 200, fullCanvas: 300 },
+  { garment: "Shirts", halfCanvas: 220, fullCanvas: 220 },
+  { garment: "Overcoats", halfCanvas: 600, fullCanvas: 1000 },
 ];
 
-const GARMENTS: { name: string; fused: string; halfCanvas: string; fullCanvas: string; handMade: string; category: string }[] = [
-  { name: "2-Piece Suit",  fused: "$699",  halfCanvas: "$1500",   fullCanvas: "$1,500", handMade: "$2,500", category: "Suits" },
-  { name: "3-Piece Suit",  fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$1,800", handMade: "$2,800", category: "Suits" },
-  { name: "Tuxedo Suit",   fused: "$899",  halfCanvas: "$1,800", fullCanvas: "$1,800", handMade: "$2,800", category: "Suits" },
-  { name: "Jacket",        fused: "$449",  halfCanvas: "$1,000", fullCanvas: "$1,000", handMade: "$1,600", category: "Separates" },
-  { name: "Trousers",      fused: "$240",  halfCanvas: "$500",   fullCanvas: "$500",   handMade: "$750",   category: "Separates" },
-  { name: "Waistcoat",     fused: "$250",  halfCanvas: "$400",   fullCanvas: "$400",   handMade: "$600",   category: "Separates" },
-  { name: "Overcoat",      fused: "$699",  halfCanvas: "$1,500", fullCanvas: "$1,500", handMade: "$2,200", category: "Outerwear" },
-  { name: "Regular Shirt", fused: "$220",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",      category: "Shirts" },
-  { name: "Tuxedo Shirt",  fused: "$250",  halfCanvas: "—",      fullCanvas: "—",      handMade: "—",      category: "Shirts" },
+const HANDMADE_PRICES = [
+  { label: "Suit (Jacket & Trousers)", price: 3500 },
+  { label: "Jacket Only", price: 2900 },
+  { label: "Trousers Only", price: 600 },
 ];
 
 const INCLUDES = [
@@ -58,61 +48,46 @@ const INCLUDES = [
 ];
 
 export function Pricing() {
-  const [activeTab, setActiveTab] = useState<ConstructionKey>("fused");
-  const [currency, setCurrency] = useState<'CAD'|'USD'|'GBP'|'EUR'>('CAD');
-  const [rates, setRates] = useState<Record<string, number>>(FALLBACK_RATES);
-  const [ratesLoaded, setRatesLoaded] = useState(false);
+  const [currency, setCurrency] = useState<Currency>("CAD");
+  const [rates, setRates] = useState<CurrencyRates>({ CAD: 1, USD: 1, GBP: 1, EUR: 1 });
+  const [ratesAsOf, setRatesAsOf] = useState<string | null>(null);
+  const [ratesError, setRatesError] = useState(false);
 
-  // Fetch live CAD-based exchange rates once on mount
   useEffect(() => {
     let cancelled = false;
 
-    async function fetchRates() {
+    async function loadRates() {
       try {
-        const res = await fetch(
-          "https://api.frankfurter.app/latest?from=CAD&to=USD,GBP,EUR"
-        );
-        if (!res.ok) throw new Error("Rate fetch failed");
-        const data = await res.json();
-        if (!cancelled && data?.rates) {
-          setRates({
-            CAD: 1,
-            USD: data.rates.USD ?? FALLBACK_RATES.USD,
-            GBP: data.rates.GBP ?? FALLBACK_RATES.GBP,
-            EUR: data.rates.EUR ?? FALLBACK_RATES.EUR,
-          });
-          setRatesLoaded(true);
+        const response = await fetch("https://api.frankfurter.dev/v2/rates?base=CAD&quotes=USD,GBP,EUR");
+        if (!response.ok) throw new Error("Exchange rate request failed");
+
+        const data: { date: string; quote: Currency; rate: number }[] = await response.json();
+        const nextRates = Object.fromEntries(data.map(({ quote, rate }) => [quote, rate])) as Partial<CurrencyRates>;
+        if (![nextRates.USD, nextRates.GBP, nextRates.EUR].every(rate => typeof rate === "number" && rate > 0)) {
+          throw new Error("Exchange rate response was incomplete");
         }
-      } catch (e) {
-        // Silently keep fallback rates — no need to show an error to visitors
-        console.warn("Using fallback exchange rates:", e);
+
+        if (!cancelled) {
+          setRates({ CAD: 1, USD: nextRates.USD!, GBP: nextRates.GBP!, EUR: nextRates.EUR! });
+          setRatesAsOf(data[0]?.date ?? null);
+        }
+      } catch {
+        if (!cancelled) setRatesError(true);
       }
     }
 
-    fetchRates();
+    loadRates();
     return () => { cancelled = true; };
   }, []);
 
-  function formatPrice(raw: string) {
-    if (!raw) return raw;
-    if (raw === '—') return raw;
-    if (raw === 'POA') return 'Contact for pricing';
-
-    const numeric = parseFloat(raw.replace(/[^0-9.]/g, ''));
-    if (Number.isNaN(numeric)) return raw;
-
-    const rate = rates[currency] ?? 1;
-    const converted = numeric * rate;
-
-    try {
-      return new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 0 }).format(converted);
-    } catch (e) {
-      return `${currency} ${Math.round(converted).toLocaleString()}`;
-    }
+  function formatPrice(cadAmount: number) {
+    const converted = cadAmount * rates[currency];
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency,
+      maximumFractionDigits: 0,
+    }).format(converted);
   }
-  const activeConstruction = CONSTRUCTION_TABS.find(t => t.key === activeTab)!;
-
-  const categories = [...new Set(GARMENTS.map(g => g.category))];
 
   return (
     <div style={{ background: "#1A0E0B" }}>
@@ -145,156 +120,122 @@ export function Pricing() {
             className="mt-4 max-w-lg text-sm leading-relaxed"
             style={{ color: "rgba(179,144,133,.65)" }}
           >
-            All prices are starting prices and reflect the construction method chosen. Select a construction type below to explore.
+            Explore our custom-made construction options and handmade bespoke garments.
           </motion.p>
         </div>
       </section>
 
-      {/* ── CONSTRUCTION TABS + TABLE ── */}
-      <section className="px-6 lg:px-14 pb-24">
-        <div className="max-w-5xl mx-auto">
-
-          {/* Tab selector */}
+      {/* ── CUSTOM-MADE + HANDMADE PRICE GUIDES ── */}
+      <section className="px-6 pt-20 pb-10 lg:px-14 lg:py-24" style={{ background: "#ECE1D8", color: "#2C1810" }}>
+        <div className="max-w-5xl mx-auto space-y-16">
           <Reveal y={16}>
-            <div className="flex flex-wrap gap-2 mb-3">
-              {CONSTRUCTION_TABS.map(tab => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className="relative px-6 py-3 text-xs tracking-[0.14em] uppercase transition-all duration-300"
-                  style={{
-                    background: activeTab === tab.key ? "#794137" : "transparent",
-                    color: activeTab === tab.key ? "#ECE1D8" : "rgba(179,144,133,.5)",
-                    border: `1px solid ${activeTab === tab.key ? "#794137" : "rgba(179,144,133,.18)"}`,
-                    fontWeight: 800,
-                    textShadow: darkSectionTextShadow,
-                  }}
-                >
-                  {tab.label}
-                  <span className="ml-2 text-xs" style={{ color: activeTab === tab.key ? "rgba(236,225,216,.55)" : "rgba(179,144,133,.35)", fontWeight: 700 }}>
-                    · {tab.level}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          {/* Currency selector (on its own line) */}
-          <Reveal delay={0.02}>
-            <div className="flex flex-wrap justify-center gap-2 mb-2">
-              {(['CAD','USD','GBP','EUR'] as const).map(c => (
-                <button
-                  key={c}
-                  onClick={() => setCurrency(c)}
-                  className="px-3 py-2 text-xs tracking-[0.1em] uppercase transition-all duration-200"
-                  style={{
-                    background: currency === c ? '#794137' : 'transparent',
-                    color: currency === c ? '#ECE1D8' : 'rgba(179,144,133,.5)',
-                    border: `1px solid ${currency === c ? '#794137' : 'rgba(179,144,133,.12)'}`,
-                    fontWeight: 800,
-                    textShadow: darkSectionTextShadow,
-                  }}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          {/* Rate freshness note */}
-          <Reveal delay={0.03}>
-            <p className="mb-6 text-center text-[10px] tracking-[0.08em]" style={{ color: "rgba(179,144,133,.4)" }}>
-              {ratesLoaded ? "Live exchange rates" : "Estimated exchange rates"}
-            </p>
-          </Reveal>
-
-          {/* Description */}
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={activeTab}
-              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3 }}
-              className="mb-10 text-sm leading-relaxed"
-              style={{ color: "rgba(179,144,133,.55)", maxWidth: "56ch", fontWeight: 600, textShadow: darkSectionTextShadow }}
-            >
-              {activeConstruction.description}
-            </motion.p>
-          </AnimatePresence>
-
-          {/* Garment table by category */}
-          {categories.map((cat, ci) => (
-            <div key={cat} className="mb-2">
-              <Reveal delay={ci * 0.05}>
-                <p className="px-5 py-2 text-xs tracking-[0.22em] uppercase" style={{ background: "rgba(121,65,55,.25)", color: "#B39085" }}>
-                  {cat}
-                </p>
-              </Reveal>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab + cat}
-                  initial="hidden"
-                  animate="visible"
-                  variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
-                >
-                  {GARMENTS.filter(g => g.category === cat).map((g, i, arr) => {
-                    const price = g[activeTab];
-                    return (
-                      <motion.div
-                        key={g.name}
-                        variants={{ hidden: { opacity: 0, x: -18 }, visible: { opacity: 1, x: 0 } }}
-                        transition={{ duration: 0.42, ease }}
-                        className="flex items-center justify-between px-5 py-5 transition-colors duration-200"
-                        style={{
-                          borderBottom: i < arr.length - 1 ? "1px solid rgba(179,144,133,.07)" : "none",
-                          background: "transparent",
-                        }}
-                        whileHover={{ background: "rgba(121,65,55,.1)" }}
-                      >
-                        <p className="text-sm" style={{ color: "#ECE1D8" }}>{g.name}</p>
-                        <p
-                          className="text-sm font-medium"
+            <div>
+              <h2 className="mb-5 text-2xl sm:text-3xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400, color: "#2C1810" }}>
+                Custom-Made Price Guide
+              </h2>
+              <div className="mb-5 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between" style={{ borderColor: "rgba(121,65,55,.2)" }}>
+                <div>
+                  <p className="mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "#794137" }}>
+                    View prices in
+                  </p>
+                  <div role="group" aria-label="Select price currency" className="inline-flex rounded border p-1" style={{ background: "#FFF9F5", borderColor: "rgba(121,65,55,.24)" }}>
+                    {CURRENCIES.map(code => {
+                      const selected = currency === code;
+                      const unavailable = code !== "CAD" && !ratesAsOf;
+                      return (
+                        <button
+                          key={code}
+                          type="button"
+                          aria-label={`Display prices in ${code}`}
+                          aria-pressed={selected}
+                          disabled={unavailable}
+                          onClick={() => setCurrency(code)}
+                          className="min-w-14 px-3 py-2 text-xs font-bold tracking-[0.08em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                           style={{
-                            fontFamily: "'Playfair Display', serif",
-                            color: price === "—" ? "rgba(179,144,133,.25)"
-                              : price === "POA" ? "#B39085"
-                              : "#ECE1D8",
+                            background: selected ? "#794137" : "transparent",
+                            color: selected ? "#ECE1D8" : unavailable ? "rgba(90,58,48,.4)" : "#5A3A30",
+                            outlineColor: "#794137",
+                            cursor: unavailable ? "not-allowed" : "pointer",
                           }}
                         >
-                          {formatPrice(price)}
-                        </p>
-                      </motion.div>
-                    );
-                  })}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          ))}
-
-          <Reveal delay={0.1}>
-            <div
-              className="mt-3 px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-3"
-              style={{ background: "rgba(121,65,55,.12)", border: "1px solid rgba(121,65,55,.2)" }}
-            >
-              <p className="text-xs leading-relaxed flex-1" style={{ color: "rgba(179,144,133,.55)" }}>
-                All prices are starting prices. USD, GBP, and EUR amounts are converted from the CAD price at current market exchange rates and rounded to the nearest whole unit; final cost depends on fabric selection and complexity.
+                          {code}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <p className="text-xs leading-relaxed sm:max-w-xs sm:text-right" style={{ color: "#5A3A30" }} aria-live="polite">
+                  {ratesAsOf
+                    ? `Latest available mid-market rates · ${ratesAsOf}`
+                    : ratesError
+                      ? "Live rates unavailable; prices are shown in CAD."
+                      : "Loading current exchange rates…"}
+                </p>
+              </div>
+              <p className="mb-8 text-sm leading-relaxed" style={{ color: "#5A3A30" }}>
+                Base prices are in CAD and shown in the selected currency. Final pricing depends on fabric selection and design details.
               </p>
-              <Link
-                to="/appointment"
-                className="shrink-0 inline-flex items-center gap-2 px-6 py-3 text-xs tracking-[0.18em] uppercase transition-all duration-300"
-                style={{ background: "#794137", color: "#ECE1D8" }}
-                onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
-                onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
-              >
-                Book a Fitting <ArrowRight size={12} />
-              </Link>
+              <div>
+                <table className="w-full table-fixed border-collapse text-left" style={{ color: "#2C1810", fontFamily: "'Raleway', sans-serif" }}>
+                  <colgroup>
+                    <col className="w-[27%]" />
+                    <col className="w-[36.5%]" />
+                    <col className="w-[36.5%]" />
+                  </colgroup>
+                  <thead>
+                    <tr className="border-b" style={{ borderColor: "rgba(121,65,55,.32)" }}>
+                      <th scope="col" className="pb-4 pr-2 text-xs font-bold sm:pb-5 sm:pr-6 sm:text-xl">Garment</th>
+                      <th scope="col" className="pb-4 px-2 text-xs font-bold sm:pb-5 sm:px-5 sm:text-xl">Half-Canvas</th>
+                      <th scope="col" className="pb-4 pl-2 text-xs font-bold sm:pb-5 sm:pl-5 sm:text-xl">Full-Canvas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {CUSTOM_MADE_PRICES.map((item, index) => (
+                      <motion.tr
+                        key={item.garment}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.35 }}
+                        transition={{ duration: 0.45, delay: index * 0.055, ease }}
+                        className="border-b last:border-0"
+                        style={{ borderColor: "rgba(121,65,55,.18)" }}
+                      >
+                        <th scope="row" className="py-4 pr-2 text-xs font-normal sm:py-5 sm:pr-6 sm:text-lg">{item.garment}</th>
+                        <td className="py-4 px-2 text-xs sm:py-5 sm:px-5 sm:text-lg">From {formatPrice(item.halfCanvas)}</td>
+                        <td className="py-4 pl-2 text-xs sm:py-5 sm:pl-5 sm:text-lg">From {formatPrice(item.fullCanvas)}</td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08} y={16}>
+            <div className="border-t pt-10" style={{ borderColor: "rgba(121,65,55,.24)", color: "#2C1810" }}>
+              <h2 className="mb-8 text-2xl sm:text-3xl" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400 }}>Handmade (Bespoke) Price Guide</h2>
+              <h3 className="mb-5 text-lg italic sm:text-xl" style={{ fontFamily: "'Playfair Display', serif" }}>Full-Canvas Construction</h3>
+              <ul className="mb-8 space-y-3 text-base sm:text-lg">
+                {HANDMADE_PRICES.map(({ label, price }, index) => (
+                  <motion.li
+                    key={label}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.8 }}
+                    transition={{ duration: 0.4, delay: index * 0.1, ease }}
+                  >
+                    <strong>{label}:</strong> Starting from {formatPrice(price)}
+                  </motion.li>
+                ))}
+              </ul>
+              <p className="mb-6 text-base sm:text-lg"><strong>Delivery Timeframe:</strong> 6–8 weeks</p>
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* ── WHAT'S INCLUDED ── */}
-      <section className="py-24 px-6 lg:px-14" style={{ background: "#ECE1D8" }}>
+      <section className="px-6 pt-12 pb-24 lg:px-14 lg:py-24" style={{ background: "#ECE1D8" }}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 lg:gap-28 items-center">
           <div>
             <Reveal><p className="mb-3 text-xs tracking-[0.3em] uppercase" style={{ color: "#794137" }}>Every Garment</p></Reveal>
