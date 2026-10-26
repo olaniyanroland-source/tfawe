@@ -27,10 +27,13 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 const CUSTOM_MADE_PRICES = [
   { garment: "Suits", halfCanvas: 1000, fullCanvas: 1500 },
   { garment: "Jackets", halfCanvas: 760, fullCanvas: 1260 },
-  { garment: "Trousers", halfCanvas: 240, fullCanvas: 240 },
-  { garment: "Waistcoats", halfCanvas: 200, fullCanvas: 300 },
-  { garment: "Shirts", halfCanvas: 220, fullCanvas: 220 },
   { garment: "Overcoats", halfCanvas: 600, fullCanvas: 1000 },
+];
+
+const INDIVIDUAL_GARMENT_PRICES = [
+  { garment: "Waistcoat", price: 250 },
+  { garment: "Shirt", price: 220 },
+  { garment: "Trouser", price: 240 },
 ];
 
 const HANDMADE_PRICES = [
@@ -206,6 +209,42 @@ export function Pricing() {
                         <th scope="row" className="py-4 pr-2 text-xs font-normal sm:py-5 sm:pr-6 sm:text-lg">{item.garment}</th>
                         <td className="py-4 px-2 text-xs sm:py-5 sm:px-5 sm:text-lg">From {formatPrice(item.halfCanvas)}</td>
                         <td className="py-4 pl-2 text-xs sm:py-5 sm:pl-5 sm:text-lg">From {formatPrice(item.fullCanvas)}</td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <h3
+                className="mb-8 mt-12 px-4 py-3 text-lg tracking-[0.06em] sm:px-5 sm:py-4 sm:text-xl"
+                style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400, color: "#2C1810", background: "rgba(121,65,55,.06)", border: "1px solid rgba(121,65,55,.22)", borderLeft: "4px solid #794137" }}
+              >
+                INDIVIDUAL GARMENT PRICE GUIDE
+              </h3>
+              <div>
+                <table className="w-full table-fixed border-collapse text-left" style={{ color: "#2C1810", fontFamily: "'Raleway', sans-serif" }}>
+                  <colgroup>
+                    <col className="w-[55%]" />
+                    <col className="w-[45%]" />
+                  </colgroup>
+                  <thead>
+                    <tr className="border-b" style={{ borderColor: "rgba(121,65,55,.32)" }}>
+                      <th scope="col" className="pb-4 pr-2 text-xs font-bold sm:pb-5 sm:pr-6 sm:text-xl">Garment</th>
+                      <th scope="col" className="pb-4 pl-2 text-xs font-bold sm:pb-5 sm:pl-5 sm:text-xl">Price</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {INDIVIDUAL_GARMENT_PRICES.map((item, index) => (
+                      <motion.tr
+                        key={item.garment}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.35 }}
+                        transition={{ duration: 0.45, delay: index * 0.055, ease }}
+                        className="border-b last:border-0"
+                        style={{ borderColor: "rgba(121,65,55,.18)" }}
+                      >
+                        <th scope="row" className="py-4 pr-2 text-xs font-normal sm:py-5 sm:pr-6 sm:text-lg">{item.garment}</th>
+                        <td className="py-4 pl-2 text-xs sm:py-5 sm:pl-5 sm:text-lg">From {formatPrice(item.price)}</td>
                       </motion.tr>
                     ))}
                   </tbody>
