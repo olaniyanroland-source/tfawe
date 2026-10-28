@@ -19,7 +19,7 @@ import work10 from "../../assets/work10.webp";
 import work11 from "../../assets/work11.MP4";
 import work12 from "../../assets/work12.webp";
 import work14 from "../../assets/work14.MP4";
-import scissorsImage from "../../assets/scissors.webp";
+import scissorsImage from "../../assets/black_scissors.png";
 import { SelectedWork } from "../components/SelectedWork";
 import { FITTING_JOURNEY_STEPS } from "../data/fittingJourney";
 
@@ -68,7 +68,7 @@ function GalleryVideo({ src, label }: { src: string; label: string }) {
   return (
     <video
       ref={ref}
-      src={src}
+      src={inView ? src : undefined}
       aria-label={label}
       autoPlay={inView}
       muted
@@ -125,26 +125,24 @@ function useCarouselAutoplay(ref: { current: HTMLDivElement | null }, intervalMs
 export function Home() {
   const journeyGalleryRef = useRef<HTMLDivElement | null>(null);
   useCarouselAutoplay(journeyGalleryRef);
-  // Render the first hero video with the initial React UI. Its document-level
-  // preload starts the download while the page loads; this used to wait 2.5
-  // seconds, then request metadata only.
-  const [videoEnabled, setVideoEnabled] = useState(true);
+  const [videoEnabled, setVideoEnabled] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const connection = (navigator as Navigator & {
       connection?: { saveData?: boolean; effectiveType?: string };
     }).connection;
-    const slowConnection = connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g";
-    if (prefersReducedMotion || connection?.saveData || slowConnection) {
-      setVideoEnabled(false);
-    }
+    const slowConnection = ["slow-2g", "2g", "3g"].includes(connection?.effectiveType ?? "");
+    if (prefersReducedMotion || connection?.saveData || slowConnection) return;
+
+    const startVideo = window.setTimeout(() => setVideoEnabled(true), 1200);
+    return () => window.clearTimeout(startVideo);
   }, []);
 
   return (
     <div>
       {/* ── HERO ── */}
-      <section className="hero relative w-full overflow-hidden" style={{ height: "100dvh" }}>
+      <section className="hero relative w-full overflow-hidden" style={{ height: "100dvh", background: "#2C1810" }}>
         {videoEnabled && (
           <video
             className="hero__media"
@@ -215,18 +213,19 @@ export function Home() {
       <section
         className="relative isolate my-4 min-h-[440px] overflow-hidden"
         style={{
-          backgroundColor: "#1A0E0B",
-          backgroundImage: `linear-gradient(rgba(26,14,11,.58),rgba(26,14,11,.7)),url("${scissorsImage}")`,
+          backgroundColor: "#FFFFFF",
+          backgroundImage: `url("${scissorsImage}")`,
           backgroundSize: "cover",
           backgroundPosition: "center 45%",
         }}
       >
         <Link
           to="/appointment"
-          className="absolute inset-x-0 bottom-8 mx-auto w-fit text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
-          style={{ color: "#ECE1D8", textShadow: "0 1px 12px rgba(26,14,11,.9)" }}
+          className="absolute inset-x-0 bottom-3 z-10 mx-auto inline-flex w-fit justify-center gap-12 text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
+          style={{ color: "#794137" }}
         >
-          Book Now
+          <span>Book</span>
+          <span>Now</span>
         </Link>
       </section>
 

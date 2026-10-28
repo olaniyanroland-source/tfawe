@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight, Check } from "lucide-react";
-import jacketImage from "../../assets/Tfawesuit.JPG";
+import jacketImage from "../../assets/Tfawesuit.webp";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 

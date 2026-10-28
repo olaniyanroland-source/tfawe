@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logo from "../../assets/transparent2.png";
+import logo from "../../assets/tfawelogotransparent.png";
 import { Outlet, NavLink, useLocation, Link } from "react-router";
 import { ChevronDown, Instagram, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";

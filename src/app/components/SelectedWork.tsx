@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import ceoImage from "../../assets/CEO.png";
-import suit11Image from "../../assets/suit11.jpg";
-import suit10Image from "../../assets/suit10.jpg";
-import suit3Image from "../../assets/suit3.jpg";
+import ceoImage from "../../assets/ceo-selected.webp";
+import suit11Image from "../../assets/suit11-selected.webp";
+import suit10Image from "../../assets/suit10-selected.webp";
+import suit3Image from "../../assets/suit3-selected.webp";
 import tfaweWorkImage from "../../assets/tfawework.png";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;

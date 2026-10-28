@@ -2,9 +2,9 @@ import { useRef } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight, Scissors, Star, Award, Users } from "lucide-react";
-import ceoImage from "../../assets/ceoTfawe.JPG";
+import ceoImage from "../../assets/ceo-about.webp";
 import { ElfsightWidget } from "../components/ElfsightWidget";
-import tfaweWorkshop from "../../assets/tfaweWorkshop2.png";
+import tfaweWorkshop from "../../assets/workshop-about.webp";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
