@@ -221,11 +221,10 @@ export function Home() {
       >
         <Link
           to="/appointment"
-          className="absolute inset-x-0 bottom-3 z-10 mx-auto inline-flex w-fit justify-center gap-12 text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
+          className="absolute inset-x-0 bottom-3 z-10 mx-auto w-fit text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
           style={{ color: "#794137" }}
         >
-          <span>Book</span>
-          <span>Now</span>
+          Book Now
         </Link>
       </section>
 
