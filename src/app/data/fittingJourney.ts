@@ -1,6 +1,6 @@
 import blackWoolPeak from "../../assets/Black wool peak lapel DB .JPG";
 import fabricSelection from "../../assets/fabricSelection.jpeg";
-import designDetails from "../../assets/designdetails.jpeg";
+import designDetails from "../../assets/whitepeak.png";
 import perfectFit from "../../assets/pefectFit.jpeg";
 import finishedGarment from "../../assets/theFinishedGarment.jpeg";
 

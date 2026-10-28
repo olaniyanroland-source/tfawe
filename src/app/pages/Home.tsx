@@ -3,9 +3,8 @@ import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import heroVideo from "../../assets/tfawefinevideo.MP4";
-import heroFallbackImage from "../../assets/fb.PNG";
-import constructionComparisonImage from "../../assets/WhatsApp Image 2026-10-20 at 16.04.52.jpeg";
-import refuseImage from "../../assets/refuse.jpeg";
+import constructionComparisonImage from "../../assets/construction-comparison.webp";
+import refuseImage from "../../assets/refuse.webp";
 import tfaweWorkImage from "../../assets/Tfawesuit.webp";
 import work1 from "../../assets/work1.mp4";
 import work2 from "../../assets/work2.mp4";
@@ -15,13 +14,12 @@ import work5 from "../../assets/work5.mp4";
 import work6 from "../../assets/work6.MP4";
 import work7 from "../../assets/work7.mp4";
 import work8 from "../../assets/heroTfawe.MP4";
-import work9 from "../../assets/work9.JPG";
-import work10 from "../../assets/work10.JPG";
+import work9 from "../../assets/work9.webp";
+import work10 from "../../assets/work10.webp";
 import work11 from "../../assets/work11.MP4";
-import work12 from "../../assets/work12.JPG";
-import work13 from "../../assets/work13.jpg";
+import work12 from "../../assets/work12.webp";
 import work14 from "../../assets/work14.MP4";
-import scissorsImage from "../../assets/scissors.png";
+import scissorsImage from "../../assets/scissors.webp";
 import { SelectedWork } from "../components/SelectedWork";
 import { FITTING_JOURNEY_STEPS } from "../data/fittingJourney";
 
@@ -55,7 +53,6 @@ const HOME_GALLERY = [
   { src: work10, label: "Custom Suit", type: "image" },
   { src: work11, label: "Custom Suit", type: "video" },
   { src: work12, label: "Custom Suit", type: "image" },
-  { src: work13, label: "Custom Suit", type: "image" },
   { src: work14, label: "Custom Suit", type: "video" },
 ];
 
@@ -135,8 +132,11 @@ export function Home() {
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-    if (prefersReducedMotion || connection?.saveData) {
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    const slowConnection = connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g";
+    if (prefersReducedMotion || connection?.saveData || slowConnection) {
       setVideoEnabled(false);
     }
   }, []);
@@ -145,20 +145,11 @@ export function Home() {
     <div>
       {/* ── HERO ── */}
       <section className="hero relative w-full overflow-hidden" style={{ height: "100dvh" }}>
-        <img
-          src={heroFallbackImage}
-          alt=""
-          aria-hidden="true"
-          fetchPriority="high"
-          decoding="async"
-          className="hero__media"
-          style={{ filter: "brightness(1.3)" }}
-        />
         {videoEnabled && (
           <video
             className="hero__media"
             style={{ filter: "brightness(1.3)" }}
-            autoPlay muted loop playsInline preload="auto"
+            autoPlay muted loop playsInline preload="metadata"
           >
             <source src={heroVideo} type="video/mp4" />
           </video>
@@ -173,7 +164,7 @@ export function Home() {
             initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease }}
             className="mb-4 text-xs tracking-[0.2em] uppercase sm:text-sm"
-            style={{ color: "#F2D7CB", fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.4rem, 2.4vw, 2rem)", fontWeight: 400, letterSpacing: ".12em", textShadow: heroTextShadow }}
+            style={{ color: "#F2D7CB", fontFamily: "'Playfair Display', serif", fontSize: "clamp(0.9rem, 1.4vw, 1.15rem)", fontWeight: 400, letterSpacing: ".12em", textShadow: heroTextShadow }}
           >
             Custom Made
           </motion.h1>
@@ -184,9 +175,9 @@ export function Home() {
           >
             <Link
               to="/appointment"
-              className="inline-flex items-center gap-3 bg-[#794137] px-8 py-4 text-xs tracking-[0.18em] uppercase text-[#ECE1D8] transition-colors duration-300 hover:bg-[#5C2F26] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
+              className="inline-flex items-center gap-1.5 bg-[#794137] px-4 py-2 text-[9px] tracking-[0.18em] uppercase text-[#ECE1D8] transition-colors duration-300 hover:bg-[#5C2F26] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 sm:text-[10px]"
             >
-              Book an appointment <ArrowRight size={14} />
+              Book an appointment <ArrowRight size={10} />
             </Link>
           </motion.div>
         </div>
