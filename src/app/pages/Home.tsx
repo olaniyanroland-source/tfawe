@@ -475,6 +475,7 @@ export function Home() {
                 poster={activeGalleryItem.poster}
                 controls
                 autoPlay
+                muted
                 playsInline
                 preload="auto"
                 aria-label={activeGalleryItem.label}
