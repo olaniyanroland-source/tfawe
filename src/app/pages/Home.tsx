@@ -14,7 +14,7 @@ import work4 from "../../assets/work4.mp4";
 import work5 from "../../assets/work5.mp4";
 import work6 from "../../assets/work6.MP4";
 import work7 from "../../assets/work7.mp4";
-import work8 from "../../assets/heroTfawe.mp4";
+import work8 from "../../assets/heroTfawe.MP4";
 import work9 from "../../assets/work9.JPG";
 import work10 from "../../assets/work10.JPG";
 import work11 from "../../assets/work11.MP4";
