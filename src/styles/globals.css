@@ -24,10 +24,28 @@ html, body {
   object-position: center;
 }
 
+.hero video::-webkit-media-controls,
+.hero video::-webkit-media-controls-panel,
+.hero video::-webkit-media-controls-play-button,
 .hero video::-webkit-media-controls-start-playback-button,
 .hero video::-webkit-media-controls-overlay-play-button {
   display: none !important;
   -webkit-appearance: none;
+}
+
+.home-gallery-dialog {
+  width: fit-content;
+  max-width: 94vw;
+  max-height: 92dvh;
+  margin: auto;
+  overflow: visible;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.home-gallery-dialog::backdrop {
+  background: rgba(26, 14, 11, 0.9);
 }
 
 .home-gallery-card {

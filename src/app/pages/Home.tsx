@@ -1,25 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import heroVideo from "../../assets/tfawefinevideo.MP4";
 import constructionComparisonImage from "../../assets/construction-comparison.webp";
 import refuseImage from "../../assets/refuse.webp";
 import tfaweWorkImage from "../../assets/Tfawesuit.webp";
-import work1 from "../../assets/work1.mp4";
-import work2 from "../../assets/work2.mp4";
-import work3 from "../../assets/work3.mp4";
-import work4 from "../../assets/work4.mp4";
-import work5 from "../../assets/work5.mp4";
+import work2 from "../../assets/work3.mp4";
+import work3 from "../../assets/work4.mp4";
+import work4 from "../../assets/work5.mp4";
+import work5 from "../../assets/work7.mp4";
 import work6 from "../../assets/work6.MP4";
-import work7 from "../../assets/work7.mp4";
+import work7 from "../../assets/work2.mp4";
 import work8 from "../../assets/heroTfawe.MP4";
 import work9 from "../../assets/work9.webp";
 import work10 from "../../assets/work10.webp";
 import work11 from "../../assets/work11.MP4";
 import work12 from "../../assets/work12.webp";
 import work14 from "../../assets/work14.MP4";
-import work1Poster from "../../assets/work1-poster.webp";
 import work2Poster from "../../assets/work2-poster.webp";
 import work3Poster from "../../assets/work3-poster.webp";
 import work4Poster from "../../assets/work4-poster.webp";
@@ -50,8 +48,11 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
   );
 }
 
-const HOME_GALLERY = [
-  { src: work1, poster: work1Poster, label: "Custom Suit", type: "video" },
+type HomeGalleryItem =
+  | { src: string; poster: string; label: string; type: "video" }
+  | { src: string; label: string; type: "image" };
+
+const HOME_GALLERY: HomeGalleryItem[] = [
   { src: work2, poster: work2Poster, label: "Custom Suit", type: "video" },
   { src: work3, poster: work3Poster, label: "Custom Suit", type: "video" },
   { src: work4, poster: work4Poster, label: "Custom Suit", type: "video" },
@@ -71,22 +72,24 @@ function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
   e.currentTarget.src = tfaweWorkImage;
 }
 
-function GalleryVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
+function GalleryVideo({ src, poster, label, isModalOpen }: {
+  src: string; poster: string; label: string; isModalOpen: boolean;
+}) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const inView = useInView(ref, { amount: 0.2 });
 
   return (
     <video
       ref={ref}
-      src={inView ? src : undefined}
+      src={inView && !isModalOpen ? src : undefined}
       poster={poster}
       aria-label={label}
-      autoPlay={inView}
+      autoPlay={inView && !isModalOpen}
       muted
       loop
       playsInline
-      preload={inView ? "metadata" : "none"}
-      className="h-full w-full object-cover"
+      preload={inView && !isModalOpen ? "metadata" : "none"}
+      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[0.92] group-hover:object-contain"
     />
   );
 }
@@ -135,8 +138,19 @@ function useCarouselAutoplay(ref: { current: HTMLDivElement | null }, intervalMs
 
 export function Home() {
   const journeyGalleryRef = useRef<HTMLDivElement | null>(null);
+  const galleryDialogRef = useRef<HTMLDialogElement | null>(null);
+  const [activeGalleryItem, setActiveGalleryItem] = useState<HomeGalleryItem | null>(null);
   useCarouselAutoplay(journeyGalleryRef);
   const [videoEnabled, setVideoEnabled] = useState(false);
+  const [heroVideoUnavailable, setHeroVideoUnavailable] = useState(false);
+
+  useEffect(() => {
+    const dialog = galleryDialogRef.current;
+    if (!dialog) return;
+
+    if (activeGalleryItem && !dialog.open) dialog.showModal();
+    if (!activeGalleryItem && dialog.open) dialog.close();
+  }, [activeGalleryItem]);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -154,11 +168,19 @@ export function Home() {
     <div>
       {/* ── HERO ── */}
       <section className="hero relative w-full overflow-hidden" style={{ height: "100dvh", background: "#2C1810" }}>
-        {videoEnabled && (
+        {videoEnabled && !heroVideoUnavailable && (
           <video
             className="hero__media"
             style={{ filter: "brightness(1.3)" }}
-            autoPlay muted loop playsInline preload="metadata"
+            autoPlay muted loop playsInline controls={false} preload="metadata"
+            onCanPlay={(event) => {
+              const video = event.currentTarget;
+              video.muted = true;
+              video.playsInline = true;
+              video.setAttribute("webkit-playsinline", "");
+              void video.play().catch(() => setHeroVideoUnavailable(true));
+            }}
+            onError={() => setHeroVideoUnavailable(true)}
           >
             <source src={heroVideo} type="video/mp4" />
           </video>
@@ -195,26 +217,33 @@ export function Home() {
       {/* ── TFAWE WORK GALLERY ── */}
       <section className="px-0 pt-4 pb-0 lg:pt-8" style={{ background: "#ECE1D8" }} aria-label="Suits and jackets gallery">
         <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4 lg:gap-4">
-          {HOME_GALLERY.map(({ src, poster, label, type }) => (
+          {HOME_GALLERY.map((item) => (
             <figure
-              key={src}
+              key={item.src}
               className="group relative m-0 overflow-hidden"
               style={{ aspectRatio: "2/3", background: "#D9CBBF" }}
             >
-              {type === "video" ? (
-                <GalleryVideo src={src} poster={poster!} label={label} />
-              ) : (
-                <img
-                  src={src}
-                  alt={label}
-                  loading="eager"
-                  decoding="async"
-                  onError={handleImageError}
-                  className="h-full w-full object-cover"
-                />
-              )}
+              <button
+                type="button"
+                onClick={() => setActiveGalleryItem(item)}
+                aria-label={`Open ${item.label} ${item.type === "video" ? "video" : "photo"}`}
+                className="absolute inset-0 block h-full w-full cursor-zoom-in border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#794137]"
+              >
+                {item.type === "video" ? (
+                  <GalleryVideo src={item.src} poster={item.poster} label={item.label} isModalOpen={Boolean(activeGalleryItem)} />
+                ) : (
+                  <img
+                    src={item.src}
+                    alt={item.label}
+                    loading="eager"
+                    decoding="async"
+                    onError={handleImageError}
+                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[0.92] group-hover:object-contain"
+                  />
+                )}
+              </button>
               <figcaption className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/35 px-4 text-center text-sm font-semibold tracking-[0.12em] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                {label}
+                {item.label}
               </figcaption>
             </figure>
           ))}
@@ -231,27 +260,22 @@ export function Home() {
         }}
       >
         <div className="absolute inset-x-0 bottom-3 z-10 flex flex-col items-center">
-          <div className="mb-2 text-center">
-            <p
-              className="m-0 text-base font-bold uppercase tracking-[0.18em] sm:text-lg"
-              style={{
-                color: "#FFFFFF",
-                fontFamily: "'Playfair Display', serif",
-                fontWeight: 700,
-                WebkitTextStroke: "0.35px #794137",
-                textShadow: "0 1px 4px rgba(26,14,11,.8)",
-              }}
-            >
-              Custom Made
-            </p>
-            <span className="mx-auto mt-1.5 block h-px w-12 bg-[#794137]" aria-hidden="true" />
+          <div className="mb-2 ml-2 text-center">
+            <div className="inline-block">
+              <p
+                className="m-0 text-sm font-bold uppercase tracking-[0.18em] sm:text-base"
+                style={{ color: "#2C1810", fontFamily: "'Raleway', sans-serif", fontWeight: 700 }}
+              >
+                Custom Made
+              </p>
+              <span className="mt-1.5 block h-px w-full bg-[#794137]" aria-hidden="true" />
+            </div>
           </div>
           <Link
             to="/appointment"
-            className="inline-flex w-fit justify-center gap-12 text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
-            style={{ color: "#794137" }}
+            className="ml-2 inline-flex items-center justify-center gap-1.5 rounded-sm bg-[#794137] px-4 py-2 text-[10px] font-semibold tracking-[0.18em] uppercase text-[#ECE1D8] shadow-sm transition-colors duration-300 hover:bg-[#5C2F26] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
           >
-            Book Now
+            Book Now <ArrowRight size={11} />
           </Link>
         </div>
       </section>
@@ -420,6 +444,53 @@ export function Home() {
           </Link>
         </Reveal>
       </section>
+
+      <dialog
+        ref={galleryDialogRef}
+        className="home-gallery-dialog"
+        aria-label={activeGalleryItem?.label ?? "Gallery viewer"}
+        onClose={() => setActiveGalleryItem(null)}
+        onCancel={(event) => {
+          event.preventDefault();
+          setActiveGalleryItem(null);
+        }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) setActiveGalleryItem(null);
+        }}
+      >
+        {activeGalleryItem && (
+          <div className="relative flex max-h-[92dvh] max-w-[94vw] items-center justify-center">
+            <button
+              type="button"
+              onClick={() => setActiveGalleryItem(null)}
+              aria-label="Close gallery viewer"
+              className="absolute right-2 top-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#2C1810] shadow-md transition-colors hover:bg-[#ECE1D8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <X size={20} />
+            </button>
+            {activeGalleryItem.type === "video" ? (
+              <video
+                key={activeGalleryItem.src}
+                src={activeGalleryItem.src}
+                poster={activeGalleryItem.poster}
+                controls
+                autoPlay
+                playsInline
+                preload="auto"
+                aria-label={activeGalleryItem.label}
+                className="block max-h-[88dvh] max-w-[94vw] object-contain"
+              />
+            ) : (
+              <img
+                key={activeGalleryItem.src}
+                src={activeGalleryItem.src}
+                alt={activeGalleryItem.label}
+                className="block max-h-[88dvh] max-w-[94vw] object-contain"
+              />
+            )}
+          </div>
+        )}
+      </dialog>
     </div>
   );
 }
