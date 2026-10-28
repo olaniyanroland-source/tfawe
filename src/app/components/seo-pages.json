@@ -7,6 +7,10 @@
     "title": "About TFawe | Toronto Custom Menswear House",
     "description": "Meet TFawe, the Toronto custom menswear house founded by Tunde Fawe and built around exceptional fit, personal style, and timeless design."
   },
+  "/portfolio": {
+    "title": "Portfolio | Custom Menswear by TFawe Toronto",
+    "description": "Explore selected TFawe custom suiting, formalwear, and atelier details, made to measure in Toronto."
+  },
   "/pricing": {
     "title": "Custom Suit Pricing | TFawe Toronto",
     "description": "Explore TFawe pricing for made-to-measure suits, tuxedos, jackets, trousers, shirts, and outerwear in Toronto."
@@ -16,8 +20,20 @@
     "description": "Discover TFawe's curated accessories and eyewear collection, selected to complete a considered custom wardrobe."
   },
   "/appointment": {
-    "title": "Book a Custom Menswear Consultation | TFawe Toronto",
-    "description": "Book a private TFawe consultation in Toronto for custom-made suiting, personal styling, wardrobe advice, and made-to-measure menswear."
+    "title": "Appointments | TFawe Toronto",
+    "description": "Explore the TFawe fitting journey and choose an online or in-person consultation for custom-made menswear."
+  },
+  "/appointment/fitting-journey": {
+    "title": "Your Fitting Journey | TFawe Toronto",
+    "description": "Follow the TFawe made-to-measure process, from the first consultation and cloth selection to hand finishing and your final fitting."
+  },
+  "/appointment/online-consultation": {
+    "title": "Online Consultation | TFawe Toronto",
+    "description": "Request an online consultation with TFawe to discuss your wardrobe, fabrics, fit, and custom menswear ideas."
+  },
+  "/appointment/in-person-consultation": {
+    "title": "In-Person Consultation | TFawe Toronto",
+    "description": "Book a private in-person custom menswear consultation at the TFawe Toronto atelier."
   },
   "/contact": {
     "title": "Contact TFawe | Custom Menswear in Toronto",

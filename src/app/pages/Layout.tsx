@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
 import logo from "../../assets/transparent2.png";
 import { Outlet, NavLink, useLocation, Link } from "react-router";
-import { Instagram, Menu, X } from "lucide-react";
+import { ChevronDown, Instagram, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Seo } from "../components/Seo";
 
 const NAV = [
   { label: "Home",        to: "/" },
-  { label: "About",       to: "/about" },
   { label: "Pricing",     to: "/pricing" },
+  { label: "Portfolio",   to: "/portfolio" },
   { label: "Accessories", to: "/accessories" },
+  { label: "About",       to: "/about" },
   { label: "Contact",     to: "/contact" },
+];
+
+const APPOINTMENT_PAGES = [
+  { label: "Appointment overview", to: "/appointment" },
+  { label: "Your fitting journey", to: "/appointment/fitting-journey" },
+  { label: "Online consultation", to: "/appointment/online-consultation" },
+  { label: "In-person consultation", to: "/appointment/in-person-consultation" },
 ];
 
 const SOCIALS = [
@@ -26,6 +34,7 @@ const LEGAL_LINKS = [
 
 export function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [appointmentOpen, setAppointmentOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterJoined, setNewsletterJoined] = useState(false);
@@ -37,6 +46,7 @@ export function Layout() {
   useEffect(() => {
     window.scrollTo(0, 0);
     setMenuOpen(false);
+    setAppointmentOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -87,51 +97,25 @@ export function Layout() {
           borderBottom: alwaysDark || scrolled ? "1px solid rgba(179,144,133,0.12)" : "none",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-14 h-20 flex items-center justify-between">
-          <Link to="/" className="shrink-0" aria-label="Home">
-            <img src={logo} alt="TFawe" className="h-8 object-contain" />
-          </Link>
-
-          {/* Desktop */}
-          <nav className="hidden md:flex items-center gap-10">
-            {NAV.map(({ label, to }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={to === "/"}
-                className="text-xs tracking-[0.18em] uppercase transition-colors duration-200"
-                style={({ isActive }) => ({
-                  color: isActive ? "#ECE1D8" : "rgba(236,225,216,0.55)",
-                  borderBottom: isActive ? "1px solid #B39085" : "1px solid transparent",
-                  paddingBottom: "2px",
-                })}
-              >
-                {label}
-              </NavLink>
-            ))}
-          </nav>
-
-          <Link
-            to="/appointment"
-            className="hidden md:flex items-center gap-2 px-6 py-2.5 text-xs tracking-[0.18em] uppercase transition-all duration-300"
-            style={{ background: "#794137", color: "#ECE1D8" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "#5C2F26")}
-            onMouseLeave={e => (e.currentTarget.style.background = "#794137")}
-          >
-            Book a Consultation 
-          </Link>
-
+        <div className="max-w-7xl mx-auto px-6 lg:px-14 h-20 grid grid-cols-[1fr_auto_1fr] items-center">
           <button
-            className="md:hidden"
+            className="justify-self-start"
             style={{ color: "#ECE1D8" }}
             onClick={() => setMenuOpen(v => !v)}
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="site-menu"
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
+
+          <Link to="/" className="shrink-0 justify-self-center" aria-label="Home">
+            <img src={logo} alt="TFawe" className="h-8 object-contain" />
+          </Link>
+          <span aria-hidden="true" />
         </div>
 
-        {/* Mobile menu */}
+        {/* Collapsed navigation on all screen sizes */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
@@ -139,7 +123,8 @@ export function Layout() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-              className="md:hidden overflow-hidden"
+              id="site-menu"
+              className="overflow-hidden"
               style={{ background: "rgba(26,14,11,0.98)" }}
             >
               <div className="px-6 pb-8 pt-3 flex flex-col gap-5">
@@ -154,13 +139,33 @@ export function Layout() {
                     {label}
                   </NavLink>
                 ))}
-                <Link
-                  to="/appointment"
-                  className="w-fit px-6 py-3 text-xs tracking-[0.18em] uppercase"
-                  style={{ background: "#794137", color: "#ECE1D8" }}
-                >
-                  Book a Consultation
-                </Link>
+                <div className="border-t pt-5" style={{ borderColor: "rgba(179,144,133,.16)" }}>
+                  <button
+                    type="button"
+                    aria-expanded={appointmentOpen}
+                    aria-controls="mobile-appointment-menu"
+                    onClick={() => setAppointmentOpen(open => !open)}
+                    className="flex w-full items-center justify-between text-left text-xs tracking-[0.2em] uppercase"
+                    style={{ color: "#ECE1D8" }}
+                  >
+                    Appointment
+                    <ChevronDown size={15} className={`transition-transform duration-200 ${appointmentOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {appointmentOpen && (
+                    <div id="mobile-appointment-menu" className="mt-4 flex flex-col gap-4 border-l pl-4" style={{ borderColor: "rgba(179,144,133,.25)" }}>
+                      {APPOINTMENT_PAGES.map(({ label, to }) => (
+                        <NavLink
+                          key={to}
+                          to={to}
+                          className="text-xs tracking-[0.1em]"
+                          style={({ isActive }) => ({ color: isActive ? "#ECE1D8" : "rgba(236,225,216,.58)" })}
+                        >
+                          {label}
+                        </NavLink>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}

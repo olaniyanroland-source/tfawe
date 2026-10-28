@@ -24,6 +24,25 @@ html, body {
   object-position: center;
 }
 
+.home-gallery-card {
+  flex: 0 0 clamp(260px, 31vw, 380px);
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .home-gallery-card {
+    flex-basis: calc((100vw - 4rem) / 2);
+  }
+}
+
 @media (min-width: 1024px) {
   .hero__media {
     /* Avoid a visible edge from sub-pixel rounding on wide desktop screens. */
