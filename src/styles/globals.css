@@ -24,6 +24,12 @@ html, body {
   object-position: center;
 }
 
+.hero video::-webkit-media-controls-start-playback-button,
+.hero video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 .home-gallery-card {
   flex: 0 0 clamp(260px, 31vw, 380px);
 }

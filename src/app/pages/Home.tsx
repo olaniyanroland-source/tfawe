@@ -19,6 +19,16 @@ import work10 from "../../assets/work10.webp";
 import work11 from "../../assets/work11.MP4";
 import work12 from "../../assets/work12.webp";
 import work14 from "../../assets/work14.MP4";
+import work1Poster from "../../assets/work1-poster.webp";
+import work2Poster from "../../assets/work2-poster.webp";
+import work3Poster from "../../assets/work3-poster.webp";
+import work4Poster from "../../assets/work4-poster.webp";
+import work5Poster from "../../assets/work5-poster.webp";
+import work6Poster from "../../assets/work6-poster.webp";
+import work7Poster from "../../assets/work7-poster.webp";
+import work8Poster from "../../assets/work8-poster.webp";
+import work11Poster from "../../assets/work11-poster.webp";
+import work14Poster from "../../assets/work14-poster.webp";
 import scissorsImage from "../../assets/black_scissors.png";
 import { SelectedWork } from "../components/SelectedWork";
 import { FITTING_JOURNEY_STEPS } from "../data/fittingJourney";
@@ -41,19 +51,19 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 }
 
 const HOME_GALLERY = [
-  { src: work1, label: "Custom Suit", type: "video" },
-  { src: work2, label: "Custom Suit", type: "video" },
-  { src: work3, label: "Custom Suit", type: "video" },
-  { src: work4, label: "Custom Suit", type: "video" },
-  { src: work5, label: "Custom Suit", type: "video" },
-  { src: work6, label: "Custom Suit", type: "video" },
-  { src: work7, label: "Custom Suit", type: "video" },
-  { src: work8, label: "Custom Suit", type: "video" },
+  { src: work1, poster: work1Poster, label: "Custom Suit", type: "video" },
+  { src: work2, poster: work2Poster, label: "Custom Suit", type: "video" },
+  { src: work3, poster: work3Poster, label: "Custom Suit", type: "video" },
+  { src: work4, poster: work4Poster, label: "Custom Suit", type: "video" },
+  { src: work5, poster: work5Poster, label: "Custom Suit", type: "video" },
+  { src: work6, poster: work6Poster, label: "Custom Suit", type: "video" },
+  { src: work7, poster: work7Poster, label: "Custom Suit", type: "video" },
+  { src: work8, poster: work8Poster, label: "Custom Suit", type: "video" },
   { src: work9, label: "Custom Suit", type: "image" },
   { src: work10, label: "Custom Suit", type: "image" },
-  { src: work11, label: "Custom Suit", type: "video" },
+  { src: work11, poster: work11Poster, label: "Custom Suit", type: "video" },
   { src: work12, label: "Custom Suit", type: "image" },
-  { src: work14, label: "Custom Suit", type: "video" },
+  { src: work14, poster: work14Poster, label: "Custom Suit", type: "video" },
 ];
 
 function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
@@ -61,7 +71,7 @@ function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
   e.currentTarget.src = tfaweWorkImage;
 }
 
-function GalleryVideo({ src, label }: { src: string; label: string }) {
+function GalleryVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const inView = useInView(ref, { amount: 0.2 });
 
@@ -69,6 +79,7 @@ function GalleryVideo({ src, label }: { src: string; label: string }) {
     <video
       ref={ref}
       src={inView ? src : undefined}
+      poster={poster}
       aria-label={label}
       autoPlay={inView}
       muted
@@ -184,19 +195,19 @@ export function Home() {
       {/* ── TFAWE WORK GALLERY ── */}
       <section className="px-0 pt-4 pb-0 lg:pt-8" style={{ background: "#ECE1D8" }} aria-label="Suits and jackets gallery">
         <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4 lg:gap-4">
-          {HOME_GALLERY.map(({ src, label, type }) => (
+          {HOME_GALLERY.map(({ src, poster, label, type }) => (
             <figure
               key={src}
               className="group relative m-0 overflow-hidden"
               style={{ aspectRatio: "2/3", background: "#D9CBBF" }}
             >
               {type === "video" ? (
-                <GalleryVideo src={src} label={label} />
+                <GalleryVideo src={src} poster={poster!} label={label} />
               ) : (
                 <img
                   src={src}
                   alt={label}
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                   onError={handleImageError}
                   className="h-full w-full object-cover"
@@ -219,13 +230,30 @@ export function Home() {
           backgroundPosition: "center 45%",
         }}
       >
-        <Link
-          to="/appointment"
-          className="absolute inset-x-0 bottom-3 z-10 mx-auto w-fit text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
-          style={{ color: "#794137" }}
-        >
-          Book Now
-        </Link>
+        <div className="absolute inset-x-0 bottom-3 z-10 flex flex-col items-center">
+          <div className="mb-2 text-center">
+            <p
+              className="m-0 text-base font-bold uppercase tracking-[0.18em] sm:text-lg"
+              style={{
+                color: "#FFFFFF",
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 700,
+                WebkitTextStroke: "0.35px #794137",
+                textShadow: "0 1px 4px rgba(26,14,11,.8)",
+              }}
+            >
+              Custom Made
+            </p>
+            <span className="mx-auto mt-1.5 block h-px w-12 bg-[#794137]" aria-hidden="true" />
+          </div>
+          <Link
+            to="/appointment"
+            className="inline-flex w-fit justify-center gap-12 text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
+            style={{ color: "#794137" }}
+          >
+            Book Now
+          </Link>
+        </div>
       </section>
 
       <section className="px-6 py-16 lg:px-14 lg:py-20" style={{ background: "#2C1810", color: "#ECE1D8" }} aria-labelledby="construction-statement-title">
