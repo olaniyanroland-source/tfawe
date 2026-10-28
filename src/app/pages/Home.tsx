@@ -2,16 +2,26 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion, useInView } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import heroVideo from "../../assets/heroTfawe.MP4";
-import secondHeroVideo from "../../assets/tfawefinevideo.MP4";
+import heroVideo from "../../assets/tfawefinevideo.MP4";
 import heroFallbackImage from "../../assets/fb.PNG";
 import constructionComparisonImage from "../../assets/WhatsApp Image 2026-10-20 at 16.04.52.jpeg";
 import refuseImage from "../../assets/refuse.jpeg";
-import nSuit1Image from "../../assets/nsuit1.PNG";
-import nSuit2Image from "../../assets/nsuit2.PNG";
-import nSuit3Image from "../../assets/nsuit3.PNG";
-import nSuit4Image from "../../assets/nsuit4.PNG";
 import tfaweWorkImage from "../../assets/Tfawesuit.webp";
+import work1 from "../../assets/work1.mp4";
+import work2 from "../../assets/work2.mp4";
+import work3 from "../../assets/work3.mp4";
+import work4 from "../../assets/work4.mp4";
+import work5 from "../../assets/work5.mp4";
+import work6 from "../../assets/work6.MP4";
+import work7 from "../../assets/work7.mp4";
+import work8 from "../../assets/heroTfawe.mp4";
+import work9 from "../../assets/work9.JPG";
+import work10 from "../../assets/work10.JPG";
+import work11 from "../../assets/work11.MP4";
+import work12 from "../../assets/work12.JPG";
+import work13 from "../../assets/work13.jpg";
+import work14 from "../../assets/work14.MP4";
+import scissorsImage from "../../assets/scissors.png";
 import { SelectedWork } from "../components/SelectedWork";
 import { FITTING_JOURNEY_STEPS } from "../data/fittingJourney";
 
@@ -33,30 +43,44 @@ function Reveal({ children, delay = 0, y = 32, className = "" }: {
 }
 
 const HOME_GALLERY = [
-  { src: nSuit1Image, label: "Ivory dinner jacket" },
-  { src: "https://unsplash.com/photos/vS0Kya7E5V4/download?force=true", label: "Half canvas suit" },
-  { src: nSuit2Image, label: "Ivory tuxedo" },
-  { src: "https://unsplash.com/photos/hDANeGXvWRw/download?force=true", label: "Full canvas suit" },
-  { src: nSuit3Image, label: "Hand-finished lapel" },
-  { src: "https://unsplash.com/photos/ZHmES480_XE/download?force=true", label: "Half canvas suit" },
-  { src: nSuit4Image, label: "Custom dinner jacket" },
-  { src: "https://unsplash.com/photos/ECJWF1NxSpM/download?force=true", label: "Full canvas suit" },
-];
-
-const HOME_PANTS_GALLERY = [
-  "-eb0moHDPBI",
-  "2qGXz5A17mc",
-  "tFaLxWkeEnA",
-  "SRBHZzeNi6Q",
-  "1mdpEQXnJ0A",
-  "4L-ZdOiSONs",
-  "Kbl1RYTPIDA",
-  "WNYmTVGVDhA",
+  { src: work1, label: "Custom Suit", type: "video" },
+  { src: work2, label: "Custom Suit", type: "video" },
+  { src: work3, label: "Custom Suit", type: "video" },
+  { src: work4, label: "Custom Suit", type: "video" },
+  { src: work5, label: "Custom Suit", type: "video" },
+  { src: work6, label: "Custom Suit", type: "video" },
+  { src: work7, label: "Custom Suit", type: "video" },
+  { src: work8, label: "Custom Suit", type: "video" },
+  { src: work9, label: "Custom Suit", type: "image" },
+  { src: work10, label: "Custom Suit", type: "image" },
+  { src: work11, label: "Custom Suit", type: "video" },
+  { src: work12, label: "Custom Suit", type: "image" },
+  { src: work13, label: "Custom Suit", type: "image" },
+  { src: work14, label: "Custom Suit", type: "video" },
 ];
 
 function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
   e.currentTarget.onerror = null;
   e.currentTarget.src = tfaweWorkImage;
+}
+
+function GalleryVideo({ src, label }: { src: string; label: string }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const inView = useInView(ref, { amount: 0.2 });
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      aria-label={label}
+      autoPlay={inView}
+      muted
+      loop
+      playsInline
+      preload={inView ? "metadata" : "none"}
+      className="h-full w-full object-cover"
+    />
+  );
 }
 
 function useCarouselAutoplay(ref: { current: HTMLDivElement | null }, intervalMs = 4500) {
@@ -102,18 +126,12 @@ function useCarouselAutoplay(ref: { current: HTMLDivElement | null }, intervalMs
 }
 
 export function Home() {
-  const [activeVideo, setActiveVideo] = useState(0);
-  const suitGalleryRef = useRef<HTMLDivElement | null>(null);
-  useCarouselAutoplay(suitGalleryRef);
-  const pantsGalleryRef = useRef<HTMLDivElement | null>(null);
-  useCarouselAutoplay(pantsGalleryRef, 6000);
   const journeyGalleryRef = useRef<HTMLDivElement | null>(null);
   useCarouselAutoplay(journeyGalleryRef);
   // Render the first hero video with the initial React UI. Its document-level
   // preload starts the download while the page loads; this used to wait 2.5
   // seconds, then request metadata only.
   const [videoEnabled, setVideoEnabled] = useState(true);
-  const heroVideos = [heroVideo, secondHeroVideo];
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -138,20 +156,18 @@ export function Home() {
         />
         {videoEnabled && (
           <video
-            key={activeVideo}
             className="hero__media"
             style={{ filter: "brightness(1.3)" }}
-            autoPlay muted playsInline preload="auto"
-            onEnded={() => setActiveVideo(current => (current + 1) % heroVideos.length)}
+            autoPlay muted loop playsInline preload="auto"
           >
-            <source src={heroVideos[activeVideo]} type="video/mp4" />
+            <source src={heroVideo} type="video/mp4" />
           </video>
         )}
         <div className="absolute inset-0" style={{ background: "linear-gradient(130deg,rgba(47,29,21,.08) 0%,rgba(121,65,55,.04) 38%,rgba(214,166,137,.02) 64%,rgba(47,29,21,.06) 100%)" }} />
         <div className="absolute inset-y-0 left-0 w-full lg:w-3/4" style={{ background: "linear-gradient(90deg,rgba(26,14,11,.12) 0%,rgba(26,14,11,.04) 48%,rgba(26,14,11,0) 100%)" }} />
         <div
           className="absolute inset-x-0 z-10 mx-auto max-w-7xl px-8 lg:px-20 text-center"
-          style={{ bottom: "clamp(1.25rem, 5vh, 3.5rem)" }}
+          style={{ bottom: "clamp(0.75rem, 3vh, 2rem)" }}
         >
           <motion.h1
             initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }}
@@ -168,103 +184,59 @@ export function Home() {
           >
             <Link
               to="/appointment"
-              className="text-link light-link inline-flex items-center gap-2 text-sm tracking-[0.08em] transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 sm:text-base"
-              style={{ color: "#FFF6EF", textShadow: heroTextShadow }}
+              className="inline-flex items-center gap-3 bg-[#794137] px-8 py-4 text-xs tracking-[0.18em] uppercase text-[#ECE1D8] transition-colors duration-300 hover:bg-[#5C2F26] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
             >
-              Book an appointment <ArrowRight size={16} />
+              Book an appointment <ArrowRight size={14} />
             </Link>
           </motion.div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3, duration: 0.7 }}
-          className="absolute bottom-6 left-8 lg:left-20 z-10 flex flex-col items-start gap-3"
-        >
-          {videoEnabled && (
-            <div
-              className="flex items-center gap-2"
-              role="group"
-              aria-label={`Hero video ${activeVideo + 1} of ${heroVideos.length}`}
-            >
-              {heroVideos.map((_, index) => (
-                <button
-                  key={index}
-                  type="button"
-                  aria-label={`Show hero video ${index + 1}`}
-                  aria-current={activeVideo === index}
-                  onClick={() => setActiveVideo(index)}
-                  className="h-1.5 rounded-full transition-all duration-300"
-                  style={{
-                    width: activeVideo === index ? 24 : 6,
-                    background: activeVideo === index ? "#ECE1D8" : "rgba(236,225,216,.45)",
-                  }}
-                />
-              ))}
-            </div>
-          )}
-        </motion.div>
       </section>
 
-      {/* ── SWIPEABLE SUIT GALLERY ── */}
-      <section className="px-6 pt-4 pb-0 lg:px-14 lg:pt-8" style={{ background: "#ECE1D8" }} aria-label="Suits and jackets gallery">
-        <motion.div
-          ref={suitGalleryRef}
-          className="hide-scrollbar max-w-7xl mx-auto flex gap-4 overflow-x-auto pb-3"
-          role="region"
-          aria-label="Suits and jackets gallery"
-          tabIndex={0}
-          style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
-          initial={{ x: 0 }}
-        >
-          {HOME_GALLERY.map(({ src, label }) => (
+      {/* ── TFAWE WORK GALLERY ── */}
+      <section className="px-0 pt-4 pb-0 lg:pt-8" style={{ background: "#ECE1D8" }} aria-label="Suits and jackets gallery">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4 lg:gap-4">
+          {HOME_GALLERY.map(({ src, label, type }) => (
             <figure
               key={src}
-              className="home-gallery-card group relative m-0 shrink-0 overflow-hidden"
-              style={{ aspectRatio: "2/3", background: "#D9CBBF", scrollSnapAlign: "start" }}
+              className="group relative m-0 overflow-hidden"
+              style={{ aspectRatio: "2/3", background: "#D9CBBF" }}
             >
-              <img
-                src={src}
-                alt={label}
-                loading="lazy"
-                decoding="async"
-                onError={handleImageError}
-                className="h-full w-full object-cover"
-              />
-              <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 py-4 text-sm text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              {type === "video" ? (
+                <GalleryVideo src={src} label={label} />
+              ) : (
+                <img
+                  src={src}
+                  alt={label}
+                  loading="lazy"
+                  decoding="async"
+                  onError={handleImageError}
+                  className="h-full w-full object-cover"
+                />
+              )}
+              <figcaption className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/35 px-4 text-center text-sm font-semibold tracking-[0.12em] text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {label}
               </figcaption>
             </figure>
           ))}
-        </motion.div>
+        </div>
       </section>
 
-      <section className="px-6 pb-16 lg:px-14" style={{ background: "#ECE1D8" }} aria-label="Tailored pants gallery">
-        <motion.div
-          ref={pantsGalleryRef}
-          className="hide-scrollbar max-w-7xl mx-auto flex gap-4 overflow-x-auto pb-3"
-          role="region"
-          aria-label="Tailored pants gallery"
-          tabIndex={0}
-          style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch", scrollbarWidth: "none" }}
-          initial={{ x: 0 }}
+      <section
+        className="relative isolate my-4 min-h-[440px] overflow-hidden"
+        style={{
+          backgroundColor: "#1A0E0B",
+          backgroundImage: `linear-gradient(rgba(26,14,11,.58),rgba(26,14,11,.7)),url("${scissorsImage}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center 45%",
+        }}
+      >
+        <Link
+          to="/appointment"
+          className="absolute inset-x-0 bottom-8 mx-auto w-fit text-sm tracking-[0.22em] uppercase transition-opacity duration-300 hover:opacity-70"
+          style={{ color: "#ECE1D8", textShadow: "0 1px 12px rgba(26,14,11,.9)" }}
         >
-          {HOME_PANTS_GALLERY.map((id, index) => (
-            <figure
-              key={id}
-              className="home-gallery-card relative m-0 shrink-0 overflow-hidden"
-              style={{ aspectRatio: "2/3", background: "#D9CBBF", scrollSnapAlign: "start" }}
-            >
-              <img
-                src={`https://unsplash.com/photos/${id}/download?force=true`}
-                alt={`Tailored pants, photo ${index + 1}`}
-                loading="lazy"
-                decoding="async"
-                onError={handleImageError}
-                className="h-full w-full object-cover"
-              />
-            </figure>
-          ))}
-        </motion.div>
+          Book Now
+        </Link>
       </section>
 
       <section className="px-6 py-16 lg:px-14 lg:py-20" style={{ background: "#2C1810", color: "#ECE1D8" }} aria-labelledby="construction-statement-title">

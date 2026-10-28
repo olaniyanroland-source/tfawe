@@ -8,7 +8,6 @@ export const router = createBrowserRouter([
     children: [
       { index: true, lazy: async () => ({ Component: (await import("./pages/Home")).Home }) },
       { path: "about", lazy: async () => ({ Component: (await import("./pages/About")).About }) },
-      { path: "portfolio", lazy: async () => ({ Component: (await import("./pages/Portfolio")).Portfolio }) },
       { path: "pricing", lazy: async () => ({ Component: (await import("./pages/Pricing")).Pricing }) },
       { path: "accessories", lazy: async () => ({ Component: (await import("./pages/Accessories")).Accessories }) },
       { path: "accesories", lazy: async () => ({ Component: (await import("./pages/Accessories")).Accessories }) },

@@ -8,7 +8,6 @@ import { Seo } from "../components/Seo";
 const NAV = [
   { label: "Home",        to: "/" },
   { label: "Pricing",     to: "/pricing" },
-  { label: "Portfolio",   to: "/portfolio" },
   { label: "Accessories", to: "/accessories" },
   { label: "About",       to: "/about" },
   { label: "Contact",     to: "/contact" },
